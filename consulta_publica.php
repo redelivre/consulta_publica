@@ -290,6 +290,10 @@ function consultas_custom_admin_menu() {
 
 function consultas_html_form_code() {
   $user_id = get_current_user_id();
+
+//var_dump(get_post_meta(get_the_ID(), "_users_voto", true));
+
+
   if (is_user_logged_in() 
        && !isset($_POST["nome"]) 
        && !isset($_POST["municipio"]) 
@@ -321,10 +325,10 @@ function consultas_html_form_code() {
     echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
     echo '<p>';
     echo 'Nome * <br />';
-    echo '<input type="text" name="nome" required="required" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="nome" required="required" value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'Municipio * <br />';
-    echo '<input type="text" name="municipio" required="required" pattern="[a-zA-Z ]+" value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="municipio" required="required" value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'UF * <br />';
     echo '<input type="text" required="required" name="uf" value="' . ( isset( get_user_meta($user_id, '_user_uf')[0]) ? esc_attr( get_user_meta($user_id, '_user_uf')[0] ) : '' ) . '" size="40" />';
@@ -334,13 +338,16 @@ function consultas_html_form_code() {
     echo '</p>';
     echo '<p>';
     echo 'Instituição * <br />';
-    echo '<input type="text" required="required" name="instituicao" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required="required" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     // 1
+    $primeira_radio = get_user_meta($user_id, '_user_primeira_radio');
+    if (count($primeira_radio) > 0){$primeira_radio = $primeira_radio[0];}
+
     echo ' A sociedade civil tomou iniciativas para promover os princípios e objetivos da Convenção local e internacionalmente? * <br/>';
-    echo '<input type="radio" name="primeira_radio" value="concordo" ' . ( get_user_meta($user_id, '_user_primeira_radio')[0] === 'concordo' ?  'checked': '' ) . '>concordo<br>';
-    echo '<input type="radio" name="primeira_radio" value="concordo_comentar" ' . ( get_user_meta($user_id, '_user_primeira_radio')[0] === 'concordo_comentar' ?  'checked': '' ) . '>concordo e quero comentar<br>';
-    echo '<input type="radio" name="primeira_radio" value="discordo_comentar" ' . ( get_user_meta($user_id, '_user_primeira_radio')[0] === 'discordo_comentar' ?  'checked': '' ) . '>discordo e quero comentar<br>';
+    echo '<input type="radio" name="primeira_radio" value="concordo" ' . ( $primeira_radio === 'concordo' ?  'checked': '' ) . '>concordo<br>';
+    echo '<input type="radio" name="primeira_radio" value="concordo_comentar" ' . ( $primeira_radio === 'concordo_comentar' ?  'checked': '' ) . '>concordo e quero comentar<br>';
+    echo '<input type="radio" name="primeira_radio" value="discordo_comentar" ' . ( $primeira_radio === 'discordo_comentar' ?  'checked': '' ) . '>discordo e quero comentar<br>';
     echo '<textarea maxlength="2100" rows="10" cols="70" name="primeira" placeholder="Máximo de 2100 caracteres" >' . ( isset( get_user_meta($user_id, '_user_primeira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_primeira')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 2
@@ -383,21 +390,25 @@ function consultas_html_form_code() {
   {
     
     //delete_post_meta(et_current_user_id(),'_users_voto');
-    $data = get_post_meta(get_current_user_id(), '_users_voto', true);
-
+    $data = get_post_meta(get_the_ID(), '_users_voto', true);
+    //var_dump($data);
     if( $data != "" ) {
       if ( !in_array( get_current_user_id(), $data ) ) {
+        var_dump($data);
         $data[] = get_current_user_id();
+        var_dump($data);
       }
+      //var_dump($data);
       $data = array_unique($data); // remove duplicates
       sort( $data ); // sort array
-      update_post_meta(get_current_user_id(), '_users_voto', $data);
+      //var_dump($data);
+      update_post_meta(get_the_ID(), '_users_voto', $data);
     }
     else {
       $data = array();
       $user = get_current_user_id();
       array_push($data, $user);
-      update_post_meta(get_current_user_id(),'_users_voto' , $data);
+      update_post_meta(get_the_ID(),'_users_voto' , $data);
     }
 
     update_user_meta( $user_id, '_user_nome', $_POST["nome"]);
@@ -508,7 +519,8 @@ function consultas_html_form_code() {
   }
   else
   {
-    echo 'você precisa de estar logado para participar da consulta pública!';
+    echo 'você precisa de estar logado para participar da consulta pública! ';
+    echo '<a href=' . wp_login_url( get_permalink() ) . ' title="Login">Fazer Login!</a><br>';
   }
 
 // quem já votou:
@@ -517,6 +529,7 @@ function consultas_html_form_code() {
   if ($users !== ""){
     foreach ($users as $user) {
       echo get_avatar($user);
+      echo "<br>";
       echo "<br>";
 
       echo "<strong>Nome: </strong><br>";
