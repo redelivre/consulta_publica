@@ -382,10 +382,8 @@ function consultas_html_form_code() {
     )
   {
     
-    //delete_post_meta(64,'_users_voto');
-    $data = get_post_meta(64, '_users_voto', true);
-
-    var_dump($data);
+    //delete_post_meta(et_current_user_id(),'_users_voto');
+    $data = get_post_meta(get_current_user_id(), '_users_voto', true);
 
     if( $data != "" ) {
       if ( !in_array( get_current_user_id(), $data ) ) {
@@ -393,16 +391,13 @@ function consultas_html_form_code() {
       }
       $data = array_unique($data); // remove duplicates
       sort( $data ); // sort array
-        echo "<br>if <br>";
-      var_dump($data);
       update_post_meta(get_current_user_id(), '_users_voto', $data);
     }
     else {
       $data = array();
       $user = get_current_user_id();
       array_push($data, $user);
-      update_post_meta(64,'_users_voto' , $data);
-      echo "else";
+      update_post_meta(get_current_user_id(),'_users_voto' , $data);
     }
 
     update_user_meta( $user_id, '_user_nome', $_POST["nome"]);
