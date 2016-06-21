@@ -289,7 +289,7 @@ function consultas_custom_admin_menu() {
 }
 
 function consultas_html_form_code() {
-$user_id = get_current_user_id();
+  $user_id = get_current_user_id();
   if (is_user_logged_in() 
        && !isset($_POST["nome"]) 
        && !isset($_POST["municipio"]) 
@@ -321,47 +321,47 @@ $user_id = get_current_user_id();
     echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
     echo '<p>';
     echo 'Nome * <br />';
-    echo '<input type="text" name="nome" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( $_POST["nome"] ) ? esc_attr( $_POST["nome"] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="nome" required="required" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'Municipio * <br />';
-    echo '<input type="text" name="municipio" pattern="[a-zA-Z ]+" value="' . ( isset( $_POST["municipio"] ) ? esc_attr( $_POST["municipio"] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="municipio" required="required" pattern="[a-zA-Z ]+" value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'UF * <br />';
-    echo '<input type="text" name="uf" value="' . ( isset( $_POST["uf"] ) ? esc_attr( $_POST["uf"] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required="required" name="uf" value="' . ( isset( get_user_meta($user_id, '_user_uf')[0]) ? esc_attr( get_user_meta($user_id, '_user_uf')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'CPF * <br />';
-    echo '<input type="text" name="cpf" pattern="([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})" value="' . ( isset( $_POST["cpf"] ) ? esc_attr( $_POST["cpf"] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required="required" name="cpf" pattern="([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})" value="' . ( isset( get_user_meta($user_id, '_user_cpf')[0] ) ? esc_attr( get_user_meta($user_id, '_user_cpf')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo '<p>';
     echo 'Instituição * <br />';
-    echo '<input type="text" name="instituicao" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( $_POST["instituicao"] ) ? esc_attr( $_POST["instituicao"] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required="required" name="instituicao" pattern="[a-zA-Z0-9 ]+" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     // 1
     echo ' A sociedade civil tomou iniciativas para promover os princípios e objetivos da Convenção local e internacionalmente? * <br/>';
-    echo '<input type="radio" name="primeira_radio" value="concordo" >concordo<br>';
-    echo '<input type="radio" name="primeira_radio" value="concordo_comentar">concordo e quero comentar<br>';
-    echo '<input type="radio" name="primeira_radio" value="discordo_comentar" >discordo e quero comentar<br>';
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="primeira">' . ( isset( $_POST["primeira"] ) ? esc_attr( $_POST["primeira"] ) : '' ) . '</textarea>';
+    echo '<input type="radio" name="primeira_radio" value="concordo" ' . ( get_user_meta($user_id, '_user_primeira_radio')[0] === 'concordo' ?  'checked': '' ) . '>concordo<br>';
+    echo '<input type="radio" name="primeira_radio" value="concordo_comentar" ' . ( get_user_meta($user_id, '_user_primeira_radio')[0] === 'concordo_comentar' ?  'checked': '' ) . '>concordo e quero comentar<br>';
+    echo '<input type="radio" name="primeira_radio" value="discordo_comentar" ' . ( get_user_meta($user_id, '_user_primeira_radio')[0] === 'discordo_comentar' ?  'checked': '' ) . '>discordo e quero comentar<br>';
+    echo '<textarea maxlength="2100" rows="10" cols="70" name="primeira" placeholder="Máximo de 2100 caracteres" >' . ( isset( get_user_meta($user_id, '_user_primeira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_primeira')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 2
     echo ' A sociedade civil tomou iniciativas para monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?) * <br/>';
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="segunda">' . ( isset( $_POST["segunda"] ) ? esc_attr( $_POST["segunda"] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="segunda"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_segunda')[0] ) ? esc_attr( get_user_meta($user_id, '_user_segunda')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 3
     echo 'A sociedade civil tomou iniciativas para contribuir para a realização de uma maior transparência e prestação de contas na governança cultural (Como?) * <br/>';
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="terceira">' . ( isset( $_POST["terceira"] ) ? esc_attr( $_POST["terceira"] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="terceira"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_terceira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_terceira')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 4
     echo 'A sociedade civil tomou iniciativas para monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?) * <br/>';
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="quarta">' . ( isset( $_POST["quarta"] ) ? esc_attr( $_POST["quarta"] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="quarta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quarta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quarta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 5
     echo 'A sociedade civil tomou iniciativas para monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?) * <br/>';
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="quinta">' . ( isset( $_POST["quinta"] ) ? esc_attr( $_POST["quinta"] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="quinta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quinta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quinta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 6
     echo 'A sociedade civil tomou iniciativas para criar parcerias inovadoras com os setores públicos e privados e com a sociedade civil de outras regiões do mundo. (Como?) * <br/>';
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="sexta">' . ( isset( $_POST["sexta"] ) ? esc_attr( $_POST["sexta"] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="sexta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_sexta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_sexta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
 
     echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
@@ -382,8 +382,29 @@ $user_id = get_current_user_id();
     )
   {
     
+    //delete_post_meta(64,'_users_voto');
+    $data = get_post_meta(64, '_users_voto', true);
 
-    $user_id = get_current_user_id();
+    var_dump($data);
+
+    if( $data != "" ) {
+      if ( !in_array( get_current_user_id(), $data ) ) {
+        $data[] = get_current_user_id();
+      }
+      $data = array_unique($data); // remove duplicates
+      sort( $data ); // sort array
+        echo "<br>if <br>";
+      var_dump($data);
+      update_post_meta(get_current_user_id(), '_users_voto', $data);
+    }
+    else {
+      $data = array();
+      $user = get_current_user_id();
+      array_push($data, $user);
+      update_post_meta(64,'_users_voto' , $data);
+      echo "else";
+    }
+
     update_user_meta( $user_id, '_user_nome', $_POST["nome"]);
     update_user_meta( $user_id, '_user_municipio', $_POST["municipio"]);
     update_user_meta( $user_id, '_user_uf', $_POST["uf"]);
@@ -431,14 +452,17 @@ $user_id = get_current_user_id();
     echo '<strong>A sociedade civil tomou iniciativas para criar parcerias inovadoras com os setores públicos e privados e com a sociedade civil de outras regiões do mundo. (Como?)</strong><br/>';
     echo get_user_meta($user_id, '_user_sexta')[0];
     echo "<br>";
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input type="submit" name="editar" value="editar"></form>';
+    $_POST = '';
+
   }
   elseif( is_user_logged_in()
        && isset(get_user_meta($user_id, '_user_nome')[0])
        && isset(get_user_meta($user_id, '_user_municipio')[0])
        && isset(get_user_meta($user_id, '_user_uf')[0])
        && isset(get_user_meta($user_id, '_user_cpf')[0])
-       //&& isset(get_user_meta($user_id, '_user_instituicao')[0])
-       //&& isset(get_user_meta($user_id, '_user_primeira_radio')[0])
+       && isset(get_user_meta($user_id, '_user_instituicao')[0])
+       && isset(get_user_meta($user_id, '_user_primeira_radio')[0])
        && isset(get_user_meta($user_id, '_user_primeira')[0])
        && isset(get_user_meta($user_id, '_user_segunda')[0])
        && isset(get_user_meta($user_id, '_user_terceira')[0])
@@ -453,8 +477,8 @@ $user_id = get_current_user_id();
     echo "<strong>Seu nome: </strong><br>";
     echo get_user_meta($user_id, '_user_nome')[0];
     echo "<br>";
-    echo "<strong>Seu Municipio:</strong><br>";
-    echo get_user_meta($user_id, '_user_municipio')[0];
+    echo "<strong>Seu Estado:</strong><br>";
+    echo get_user_meta($user_id, '_user_uf')[0];
     echo "<br>";
 
     // 1
@@ -491,6 +515,53 @@ $user_id = get_current_user_id();
   {
     echo 'você precisa de estar logado para participar da consulta pública!';
   }
+
+// quem já votou:
+
+    $users = get_post_meta(get_the_ID(), "_users_voto", true);
+  if ($users !== ""){
+    foreach ($users as $user) {
+      echo get_avatar($user);
+      echo "<br>";
+
+      echo "<strong>Nome: </strong><br>";
+      echo get_user_meta($user, '_user_nome')[0];
+      echo "<br>";
+      echo "<strong>Estado:</strong><br>";
+      echo get_user_meta($user, '_user_uf')[0];
+      echo "<br>";
+
+      // 1
+      echo '<strong> A sociedade civil tomou iniciativas para promover os princípios e objetivos da Convenção local e internacionalmente?</strong><br/>';
+          echo get_user_meta($user, '_user_primeira_radio')[0];
+      echo "<br>";
+      echo get_user_meta($user, '_user_primeira')[0];
+      echo "<br>";
+      // 2
+      echo '<strong>A sociedade civil tomou iniciativas para monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?)</strong><br/>';
+      echo get_user_meta($user, '_user_segunda')[0];
+      echo "<br>";
+      // 3
+      echo '<strong>A sociedade civil tomou iniciativas para contribuir para a realização de uma maior transparência e prestação de contas na governança cultural (Como?)</strong><br/>';
+      echo get_user_meta($user, '_user_terceira')[0];
+      echo "<br>";
+      // 4
+      echo '<strong>A sociedade civil tomou iniciativas para monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?)</strong><br/>';
+      echo get_user_meta($user, '_user_quarta')[0];
+      echo "<br>";
+      // 5
+      echo '<strong>A sociedade civil tomou iniciativas para monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?)</strong><br/>';
+      echo get_user_meta($user, '_user_quinta')[0];
+      echo "<br>";
+      // 6
+      echo '<strong>A sociedade civil tomou iniciativas para criar parcerias inovadoras com os setores públicos e privados e com a sociedade civil de outras regiões do mundo. (Como?)</strong><br/>';
+      echo get_user_meta($user, '_user_sexta')[0];
+      echo "<br>";
+
+    }
+  }
+
+
 }
 add_shortcode('perguntas', 'consultas_html_form_code');
 function consultas_insert_get_metas()
