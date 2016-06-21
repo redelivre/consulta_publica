@@ -394,9 +394,7 @@ function consultas_html_form_code() {
     //var_dump($data);
     if( $data != "" ) {
       if ( !in_array( get_current_user_id(), $data ) ) {
-        var_dump($data);
         $data[] = get_current_user_id();
-        var_dump($data);
       }
       //var_dump($data);
       $data = array_unique($data); // remove duplicates
