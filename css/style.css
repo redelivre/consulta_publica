@@ -1,0 +1,30 @@
+#left-area .post-meta {
+    list-style: none;
+    padding-left: 0px;
+}
+
+span.post-meta-key {
+     font-weight: bold;
+}
+
+
+.content_respostas {
+	background-color: #EEE;
+	width: 47%;
+	float: left; 
+	margin: 1.5%;
+        padding: 15px;
+}
+
+.avatar-resposta {
+	width: 25%;
+	float: left; 
+	margin-bottom: 15px;
+}
+
+.dados-resposta {
+	width: 70%;
+	float: left;
+	margin-bottom: 15px;
+	margin-left: 15px;
+}
