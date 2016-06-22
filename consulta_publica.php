@@ -474,7 +474,7 @@ function consultas_html_form_code() {
     		>
         </div>
     </div><br><?php
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_documentosapoio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_documentosapoio')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_documentosapoio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_documentosapoio')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // botao de enviar
 
