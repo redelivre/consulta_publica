@@ -316,39 +316,39 @@ function consultas_html_form_code() {
        && !isset($_POST["quarta"])
        && !isset($_POST["quinta"])
        && !isset($_POST["sexta"])
-       && !isset(get_user_meta($user_id, '_user_nome')[0])
-       && !isset(get_user_meta($user_id, '_user_municipio')[0])
-       && !isset(get_user_meta($user_id, '_user_uf')[0])
-       && !isset(get_user_meta($user_id, '_user_cpf')[0])
-       && !isset(get_user_meta($user_id, '_user_instituicao')[0])
-       && !isset(get_user_meta($user_id, '_user_primeira')[0])
-       && !isset(get_user_meta($user_id, '_user_segunda')[0])
-       && !isset(get_user_meta($user_id, '_user_terceira')[0])
-       && !isset(get_user_meta($user_id, '_user_quarta')[0])
-       && !isset(get_user_meta($user_id, '_user_quinta')[0])
-       && !isset(get_user_meta($user_id, '_user_sexta')[0])
+       && get_user_meta($user_id, '_user_nome', true) != ''
+       && get_user_meta($user_id, '_user_municipio', true) != ''
+       && get_user_meta($user_id, '_user_uf', true) != ''
+       && get_user_meta($user_id, '_user_cpf', true) != ''
+       && get_user_meta($user_id, '_user_instituicao', true) != ''
+       && get_user_meta($user_id, '_user_primeira', true) != ''
+       && get_user_meta($user_id, '_user_segunda', true) != ''
+       && get_user_meta($user_id, '_user_terceira', true) != ''
+       && get_user_meta($user_id, '_user_quarta', true) != ''
+       && get_user_meta($user_id, '_user_quinta', true) != ''
+       && get_user_meta($user_id, '_user_sexta', true) != ''
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
     echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" id="commentform" enctype="multipart/form-data">';
     echo '<p>';
     echo 'Nome * <br />';
-    echo '<input type="text" name="nome" required value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="nome" required value="' . ( get_user_meta($user_id, '_user_nome', true) != '' ? esc_attr( get_user_meta($user_id, '_user_nome', true) ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'CPF * <br />';
-    echo '<input type="text" required name="cpf" pattern="([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})" value="' . ( isset( get_user_meta($user_id, '_user_cpf')[0] ) ? esc_attr( get_user_meta($user_id, '_user_cpf')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required name="cpf" pattern="([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})" value="' . ( get_user_meta($user_id, '_user_cpf', true) != '' ? esc_attr( get_user_meta($user_id, '_user_cpf', true) ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'E-mail * <br />';
-    echo '<input type="email" required name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value="' . ( isset( get_user_meta($user_id, '_user_email')[0] ) ? esc_attr( get_user_meta($user_id, '_user_email')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="email" required name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value="' . ( get_user_meta($user_id, '_user_email', true) != '' ? esc_attr( get_user_meta($user_id, '_user_email', true) ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'Telefone * <br />';
-    echo '<input type="text" required name="telefone" maxlength="15" value="' . ( isset( get_user_meta($user_id, '_user_telefone')[0] ) ? esc_attr( get_user_meta($user_id, '_user_telefone')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required name="telefone" maxlength="15" value="' . ( get_user_meta($user_id, '_user_telefone', true) != '' ? esc_attr( get_user_meta($user_id, '_user_telefone', true) ) : '' ) . '" size="40" />';
     echo '</p>';
     echo ' Cidade * <br />';
-    echo '<input type="text" name="municipio" required value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="municipio" required value="' . ( get_user_meta($user_id, '_user_municipio', true) != '' ? esc_attr( get_user_meta($user_id, '_user_municipio', true) ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'UF * <br />';
-    echo '<input type="text" required name="uf" value="' . ( isset( get_user_meta($user_id, '_user_uf')[0]) ? esc_attr( get_user_meta($user_id, '_user_uf')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required name="uf" value="' . ( get_user_meta($user_id, '_user_uf', true) != '' ? esc_attr( get_user_meta($user_id, '_user_uf', true) ) : '' ) . '" size="40" />';
     echo '</p>';
 
     echo '<p>';
@@ -358,9 +358,9 @@ function consultas_html_form_code() {
 
     echo 'Representatividade: * <br>';
     echo '<input type="radio" id="plenaria" onclick="showInstituicao()" name="representatividade" value="Plenária" ' . ( $representatividade === 'Plenária' ?  'checked': '' ) . ' required>Plenária ';
-    echo '<input type="text" id="instituicao" ' . ( $representatividade === 'Plenária' ?  '':'style="visibility:hidden"' ) . ' placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" /><br>';
+    echo '<input type="text" id="instituicao" ' . ( $representatividade === 'Plenária' ?  '':'style="visibility:hidden"' ) . ' placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( get_user_meta($user_id, '_user_instituicao', true) != '' ? esc_attr( get_user_meta($user_id, '_user_instituicao', true) ) : '' ) . '" size="40" /><br>';
     echo '<input type="radio" id="setorial" onclick="showArea()" name="representatividade" value="Setorial" ' . ( $representatividade === 'setorial' ?  'checked': '' ) . '>Setorial ';
-    echo '<input type="text" id="setorial_area" ' . ( $representatividade === 'setorial' ?  '':'style="visibility:hidden"' ) . ' name="setorial_area" placeholder="Digite aqui a sua área" value="' . ( isset( get_user_meta($user_id, '_user_setorial_area')[0] ) ? esc_attr( get_user_meta($user_id, '_user_setorial_area')[0] ) : '' ) . '" size="40" /><br>';
+    echo '<input type="text" id="setorial_area" ' . ( $representatividade === 'setorial' ?  '':'style="visibility:hidden"' ) . ' name="setorial_area" placeholder="Digite aqui a sua área" value="' . ( get_user_meta($user_id, '_user_setorial_area', true) != '' ? esc_attr( get_user_meta($user_id, '_user_setorial_area', true) ) : '' ) . '" size="40" /><br>';
     echo '<input type="radio" onclick="hideAll()" name="representatividade" value="Sociedade" ' . ( $representatividade === 'Sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
 
     // relatório
@@ -381,36 +381,36 @@ function consultas_html_form_code() {
     // 1 ok
 
     echo $cabecalho_primeira;
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="primeira" placeholder="Máximo de 2100 caracteres" >' . ( isset( get_user_meta($user_id, '_user_primeira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_primeira')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" rows="10" cols="70" name="primeira" placeholder="Máximo de 2100 caracteres" >' . ( get_user_meta($user_id, '_user_primeira', true) != '' ? esc_attr( get_user_meta($user_id, '_user_primeira', true) ) : '' ) . '</textarea>';
     echo '</p>';
     // 2
 
     echo $cabecalho_segunda;
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="segunda"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_segunda')[0] ) ? esc_attr( get_user_meta($user_id, '_user_segunda')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="segunda"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_segunda', true) != '' ? esc_attr( get_user_meta($user_id, '_user_segunda', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // 3
     
     echo $cabecalho_terceira;
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="terceira"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_terceira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_terceira')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="terceira"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_terceira', true) != '' ? esc_attr( get_user_meta($user_id, '_user_terceira', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // 4
     
     echo $cabecalho_quarta;
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="quarta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quarta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quarta')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="quarta"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_quarta', true) != '' ? esc_attr( get_user_meta($user_id, '_user_quarta', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // 5
     
     echo $cabecalho_quinta;
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="quinta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quinta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quinta')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="quinta"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_quinta', true) != '' ? esc_attr( get_user_meta($user_id, '_user_quinta', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // 6
     
     echo $cabecalho_sexta;
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="sexta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_sexta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_sexta')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="sexta"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_sexta', true) != '' ? esc_attr( get_user_meta($user_id, '_user_sexta', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // desafio 
@@ -420,13 +420,13 @@ function consultas_html_form_code() {
     // desafio 1
 
     echo "Desafio 1 <br>";
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="desafio1"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_desafio1')[0] ) ? esc_attr( get_user_meta($user_id, '_user_desafio1')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="desafio1"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_desafio1', true) != '' ? esc_attr( get_user_meta($user_id, '_user_desafio1', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // desafio 2
     
     echo "Desafio 2 <br>";
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="desafio2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_desafio2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_desafio2')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="desafio2"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_desafio2', true) != '' ? esc_attr( get_user_meta($user_id, '_user_desafio2', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // solucao
@@ -436,13 +436,13 @@ function consultas_html_form_code() {
     // solucao 1
     
     echo "Solução 1 <br>";
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="solucao1"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_solucao1')[0] ) ? esc_attr( get_user_meta($user_id, '_user_solucao1')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="solucao1"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_solucao1', true) != '' ? esc_attr( get_user_meta($user_id, '_user_solucao1', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // solucao 2
     
     echo "Solução 2 <br>";
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="solucao2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_solucao2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_solucao2')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="solucao2"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_solucao2', true) != '' ? esc_attr( get_user_meta($user_id, '_user_solucao2', true) ) : '' ) . '</textarea>';
     echo '</p>';
 
     // atividade
@@ -452,13 +452,13 @@ function consultas_html_form_code() {
     // atividade 1
     
     echo "Atividade 1 <br>";
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade1"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_atividade1')[0] ) ? esc_attr( get_user_meta($user_id, '_user_atividade1')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade1"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_atividade1', true) != '' ? esc_attr( get_user_meta($user_id, '_user_atividade1', true) ) : '' ) . '</textarea>';
     echo '</p>';
     
     // atividade 2
     
     echo "Atividade 2 <br>";
-    echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_atividade2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_atividade2')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade2"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_atividade2', true) != '' ? esc_attr( get_user_meta($user_id, '_user_atividade2', true) ) : '' ) . '</textarea>';
     echo '</p>';
 
     ?>
@@ -474,7 +474,7 @@ function consultas_html_form_code() {
     		>
         </div>
     </div><br><?php
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_documentosapoio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_documentosapoio')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_documentosapoio', true) != '' ? esc_attr( get_user_meta($user_id, '_user_documentosapoio', true) ) : '' ) . '</textarea>';
     echo '</p>';
     // botao de enviar
 
@@ -624,27 +624,7 @@ function consultas_html_form_code() {
 
   }
   elseif( is_user_logged_in()
-       && get_user_meta($user_id, '_user_nome', true) !== null
-       && get_user_meta($user_id, '_user_municipio', true) !== null
-       && get_user_meta($user_id, '_user_uf', true) !== null
-       && get_user_meta($user_id, '_user_cpf', true)!== null
-       && get_user_meta($user_id, '_user_representatividade', true)!== null
-       && get_user_meta($user_id, '_user_relatorio_radio', true)!== null
-       && get_user_meta($user_id, '_user_relatorio', true)!== null
-       && get_user_meta($user_id, '_user_instituicao', true) !== null
-       && get_user_meta($user_id, '_user_setorial_area', true) !== null
-       && get_user_meta($user_id, '_user_primeira', true) !== null
-       && get_user_meta($user_id, '_user_segunda', true) !== null
-       && get_user_meta($user_id, '_user_terceira', true) !== null
-       && get_user_meta($user_id, '_user_quarta', true) !== null
-       && get_user_meta($user_id, '_user_quinta', true) !== null
-       && get_user_meta($user_id, '_user_sexta', true) !== null
-       && get_user_meta($user_id, '_user_desafio1', true) !== null
-       && get_user_meta($user_id, '_user_desafio2', true) !== null
-       && get_user_meta($user_id, '_user_solucao1', true) !== null
-       && get_user_meta($user_id, '_user_solucao2', true) !== null
-       && get_user_meta($user_id, '_user_atividade1', true) !== null
-       && get_user_meta($user_id, '_user_atividade2', true) !== null
+       && get_user_meta($user_id, '_user_primeira', true) != ''
     )
   {
 
