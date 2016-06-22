@@ -645,29 +645,31 @@ function consultas_html_form_code() {
   	{
   		unset($users[$current_user_index]);
   	}
-  	echo '<div class="quem-votou">';
-  	echo "<br/><h1>Quem Votou: </h1><br>";
-    foreach ($users as $user) {
-      echo "<div class='content_respostas'>";
-      echo "<div class='avatar-resposta'>";
-      echo get_avatar($user);
-      echo "</div>";
-
-    consulta_respostas($user, 
-        $cabecalho_etapa1,
-        $cabecalho_etapa2,
-        $cabecalho_primeira,
-        $cabecalho_segunda,
-        $cabecalho_terceira,
-        $cabecalho_quarta,
-        $cabecalho_quinta,
-        $cabecalho_sexta,
-        $cabecalho_desafio,
-        $cabecalho_solucao,
-        $cabecalho_atividade
-      );
-    }
-    echo '</div>'; // End quem-votou
+  	if (count($users) > 0){
+	  	echo '<div class="quem-votou">';
+	  	echo "<br/><h1>Quem Votou: </h1><br>";
+	    foreach ($users as $user) {
+	      echo "<div class='content_respostas'>";
+	      echo "<div class='avatar-resposta'>";
+	      echo get_avatar($user);
+	      echo "</div>";
+	
+	    consulta_respostas($user, 
+	        $cabecalho_etapa1,
+	        $cabecalho_etapa2,
+	        $cabecalho_primeira,
+	        $cabecalho_segunda,
+	        $cabecalho_terceira,
+	        $cabecalho_quarta,
+	        $cabecalho_quinta,
+	        $cabecalho_sexta,
+	        $cabecalho_desafio,
+	        $cabecalho_solucao,
+	        $cabecalho_atividade
+	      );
+	    }
+	    echo '</div>'; // End quem-votou
+  	}
   }
 
 
