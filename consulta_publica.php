@@ -327,7 +327,7 @@ function consultas_html_form_code() {
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data">';
     echo '<p>';
     echo 'Nome * <br />';
     echo '<input type="text" name="nome" required="required" value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
@@ -356,9 +356,9 @@ function consultas_html_form_code() {
 
     echo 'Representatividade: * <br>';
     echo '<input type="radio" name="representatividade" value="plenaria" ' . ( $representatividade === 'plenaria' ?  'checked': '' ) . '>Plenária   ';
-    echo '<input type="text" required="required" placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" /><br>';
+    echo '<input type="text" placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" /><br>';
     echo '<input type="radio" name="representatividade" value="setorial" ' . ( $representatividade === 'setorial' ?  'checked': '' ) . '>Setorial   ';
-    echo '<input type="text" required="required" placeholder="Digite aqui a sua área" name="setorial_area" value="' . ( isset( get_user_meta($user_id, '_user_setorial_area')[0] ) ? esc_attr( get_user_meta($user_id, '_user_setorial_area')[0] ) : '' ) . '" size="40" /><br>';
+    echo '<input type="text" placeholder="Digite aqui a sua área" name="setorial_area" value="' . ( isset( get_user_meta($user_id, '_user_setorial_area')[0] ) ? esc_attr( get_user_meta($user_id, '_user_setorial_area')[0] ) : '' ) . '" size="40" /><br>';
     echo '<input type="radio" name="representatividade" value="sociedade" ' . ( $representatividade === 'sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
 
     // relatório
@@ -409,11 +409,21 @@ function consultas_html_form_code() {
     echo $cabecalho_sexta;
     echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="sexta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_sexta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_sexta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
-
-    echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
-    echo '</form>';
-  }
-  elseif(is_user_logged_in() 
+    ?>
+	<div class="attach">
+		<div class="att-block">
+			<label for="att" class="att-item-label">
+				<div class="att-item-title"><?php _e('Anexar Documento'); ?>
+   				</div>
+			</label> <input type="file" name="att" id="att"
+				value="<?php ?>"
+				class="file-upload">
+	    </div>
+	</div><?php
+		echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
+		echo '</form>';
+	}
+	elseif(is_user_logged_in() 
       && isset($_POST["nome"]) 
       && isset($_POST["municipio"]) 
       && isset($_POST["uf"]) 
@@ -427,7 +437,43 @@ function consultas_html_form_code() {
       && isset($_POST["sexta"])
     )
   {
-    
+		
+  	$attach_id = array();
+  	$attach = array();
+  	$message = array(); //TODO error parser
+  	$notice = false;
+  	
+  	$has_att = true;
+  	
+  	if ($_FILES)
+  	{
+  		if (!function_exists('wp_generate_attachment_metadata')){
+  			require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+  			require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+  			require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+  		}
+  		foreach ($_FILES as $file => $array)
+  		{
+  			if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK && $_FILES[$file]['error'] !== UPLOAD_ERR_NO_FILE )
+  			{
+  				switch($file)
+  				{
+  					case 'att':
+  					default:
+  						$message[] = __('Erro ao registrar anexo');
+  						$has_att = false;
+  						break;
+  				}
+  	
+  				$notice = true;
+  			}
+  			elseif( $_FILES[$file]['error'] == UPLOAD_ERR_OK )
+  			{
+  				$attach_id[$file] = media_handle_upload( $file, 0 );
+  				$attach[$file] = wp_get_attachment_url($attach_id[$file]);
+  			}
+  		}
+  	}
     //delete_post_meta(et_current_user_id(),'_users_voto');
     $data = get_post_meta(get_the_ID(), '_users_voto', true);
     //var_dump($data);
@@ -463,6 +509,20 @@ function consultas_html_form_code() {
     update_user_meta( $user_id, '_user_quarta', $_POST["quarta"]);
     update_user_meta( $user_id, '_user_quinta', $_POST["quinta"]);
     update_user_meta( $user_id, '_user_sexta', $_POST["sexta"]);
+    
+    // can we have more attachment in future
+    foreach ($attach_id as $key => $value)
+    {
+    	//and if you want to set that image as Post  then use:
+    	if($key == 'att' && $has_thumbnail)
+    	{
+    		if( ! update_user_meta($post_ID,'_user_att1', $attach_id[$key]))
+    		{
+    			$message[] = __('Erro ao gravar anexo', 'pontosdecultura');
+    			$notice = true;
+    		}
+    	}
+    }
 
     echo "<h2>Voto inserido com sucesso!</h2><br>";
     consulta_respostas($user_id, 
