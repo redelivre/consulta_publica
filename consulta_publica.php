@@ -605,9 +605,9 @@ function consultas_html_form_code() {
        && get_user_meta($user_id, '_user_primeira', true) != ''
     )
   {
-
-    echo "Veja abaixo seu voto: <br>";
-    
+	echo '<div class="seu-voto">';
+    echo "<h1>Veja abaixo seu voto: </h1><br>";
+    echo "<div class='content_respostas'>";
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
         $cabecalho_etapa2,
@@ -622,19 +622,20 @@ function consultas_html_form_code() {
         $cabecalho_atividade
       );
     echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="editar" value="editar"></form>';
-
+    echo '</div>'; // End seu-voto;
   }
   else
   {
     echo 'você precisa de estar logado para participar da consulta pública! ';
     echo '<a href=' . wp_login_url( get_permalink() ) . ' title="Login">Fazer Login!</a><br>';
-    echo "<div class='clear'>";	
+    echo "<div class='clear'></div>";	
   }
 
 // quem já votou:
-
   $users = get_post_meta(get_the_ID(), "_users_voto", true);
   if ($users !== ""){
+  	echo '<div class="quem-votou">';
+  	echo "<br/><h1>Quem Votou: </h1><br>";
     foreach ($users as $user) {
       echo "<div class='content_respostas'>";
       echo "<div class='avatar-resposta'>";
@@ -655,6 +656,7 @@ function consultas_html_form_code() {
         $cabecalho_atividade
       );
     }
+    echo '</div>'; // End quem-votou
   }
 
 
