@@ -456,7 +456,7 @@ function consultas_html_form_code() {
     </div><br><?php
     echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres, ">' . ( get_user_meta($user_id, '_user_documentosapoio', true) != '' ? esc_attr( get_user_meta($user_id, '_user_documentosapoio', true) ) : '' ) . '</textarea>';
     echo '</p>';
-    echo 'Dúvidas sobre o sistema de consulta: <a href="mailto:laboratoriodeculturadigital@gmai.com">laboratoriodeculturadigital@gmai.com</a><br><br>';
+    echo 'Dúvidas sobre o sistema de consulta: <a href="mailto:laboratoriodeculturadigital@gmail.com">laboratoriodeculturadigital@gmail.com</a><br><br>';
     // botao de enviar
 
     echo '<p><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="enviar" value="Enviar"/></p>';
