@@ -40,8 +40,9 @@ function create_consulta()
           'slug' => 'consultas'
           ),
         'menu_icon' => 'dashicons-admin-users',
+      	'supports' => array('title', 'editor', 'author')
         )
-          );
+     );
 }
 
 
@@ -639,6 +640,11 @@ function consultas_html_form_code() {
 // quem já votou:
   $users = get_post_meta(get_the_ID(), "_users_voto", true);
   if ($users !== ""){
+  	$current_user_index = array_search($user_id, $users);
+  	if($current_user_index !== false)
+  	{
+  		unset($users[$current_user_index]);
+  	}
   	echo '<div class="quem-votou">';
   	echo "<br/><h1>Quem Votou: </h1><br>";
     foreach ($users as $user) {
