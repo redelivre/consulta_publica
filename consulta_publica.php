@@ -365,7 +365,9 @@ function consultas_html_form_code() {
 
     // relatório
     echo '<h4>'.$cabecalho_etapa1.'</h4>';
-
+    echo '<br>';
+    echo '<a href="/wp-content/plugins/consulta_publica/files/RELATÓRIO_QUADRIENAL_UNESCO.pdf" target="_blank">Acesse o relatório aqui</a><br>';
+    echo '<br>';
     $relatorio_radio = get_user_meta($user_id, '_user_relatorio_radio', true);
 
     echo '<input type="radio" onclick="hideEditor()" name="relatorio_radio" value="Concordo com o relatório apresentado" ' . ( $relatorio_radio === 'Concordo com o relatório apresentado' ?  'checked': '' ) . ' required>Concordo com o relatório apresentado<br>';
@@ -601,6 +603,7 @@ function consultas_html_form_code() {
     }
 
     echo "<h2>Voto inserido com sucesso!</h2><br>";
+
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
         $cabecalho_etapa2,
