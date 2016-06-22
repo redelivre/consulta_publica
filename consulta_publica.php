@@ -290,22 +290,25 @@ function consultas_custom_admin_menu() {
 
 function consultas_html_form_code() {
   $user_id = get_current_user_id();
-  $cabecalho_relatorio = "Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco: <br>";
-  $cabecalho_primeira = 'Promover os princípios e objetivos da Convenção local e internacionalmente. (Como?) * <br/>';
-  $cabecalho_segunda = 'Levar as preocupações dos cidadãos, associações e empresas às autoridades públicas, incluindo as de grupos vulneráveis (Como?) * <br/>';
-  $cabecalho_terceira = 'Contribui para a realização de uma maior transparência e prestação de contas na governança cultural (Como?) * <br/>';
-  $cabecalho_quarta = 'Monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?) * <br/>';
-  $cabecalho_quinta = 'Criar capacidades nas áreas ligadas à Convenção e que recolhem dados. (Como?) * <br/>';
-  $cabecalho_sexta = 'Criar parcerias inovadoras com os setores públicos e privados e com a sociedade civil de outras regiões do mundo. (Como?) * <br/>';
-
+  $cabecalho_relatorio = '<strong>Etapa 1 - Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco:</strong> <br>';
+  $cabecalho_primeira = '<strong>Promover os princípios e objetivos da Convenção local e internacionalmente. (Como?) *</strong> <br/>';
+  $cabecalho_segunda = '<strong>Levar as preocupações dos cidadãos, associações e empresas às autoridades públicas, incluindo as de grupos vulneráveis (Como?) *</strong> <br/>';
+  $cabecalho_terceira = '<strong>Contribui para a realização de uma maior transparência e prestação de contas na governança cultural (Como?) *</strong> <br/>';
+  $cabecalho_quarta = '<strong>Monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?) *</strong> <br/>';
+  $cabecalho_quinta = '<strong>Criar capacidades nas áreas ligadas à Convenção e que recolhem dados. (Como?) *</strong> <br/>';
+  $cabecalho_sexta = '<strong>Criar parcerias inovadoras com os setores públicos e privados e com a sociedade civil de outras regiões do mundo. (Como?) *</strong> <br/>';
+  $cabecalho_desafio = '<strong>Desafios encontrados ou previstos na implementação da Convenção: </strong><br>';
+  $cabecalho_solucao = '<strong>Soluções encontradas e previstas:</strong> <br>';
+  $cabecalho_atividade = '<strong>Atividades planejadas para os próximos 4 anos na implementação da Convenção (liste-as):</strong> <br>';
 
   if (is_user_logged_in() 
        && !isset($_POST["nome"]) 
        && !isset($_POST["municipio"]) 
        && !isset($_POST["uf"])
        && !isset($_POST["cpf"])
+       && !isset($_POST["representatividade"])
        && !isset($_POST["instituicao"])
-       && !isset($_POST["primeira_radio"])
+       && !isset($_POST["setorial_area"])
        && !isset($_POST["primeira"])
        && !isset($_POST["segunda"])
        && !isset($_POST["terceira"])
@@ -317,7 +320,6 @@ function consultas_html_form_code() {
        && !isset(get_user_meta($user_id, '_user_uf')[0])
        && !isset(get_user_meta($user_id, '_user_cpf')[0])
        && !isset(get_user_meta($user_id, '_user_instituicao')[0])
-       && !isset(get_user_meta($user_id, '_user_primeira_radio')[0])
        && !isset(get_user_meta($user_id, '_user_primeira')[0])
        && !isset(get_user_meta($user_id, '_user_segunda')[0])
        && !isset(get_user_meta($user_id, '_user_terceira')[0])
@@ -327,107 +329,165 @@ function consultas_html_form_code() {
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data">';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
     echo '<p>';
     echo 'Nome * <br />';
-    echo '<input type="text" name="nome" required="required" value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="nome" required value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'CPF * <br />';
-    echo '<input type="text" required="required" name="cpf" pattern="([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})" value="' . ( isset( get_user_meta($user_id, '_user_cpf')[0] ) ? esc_attr( get_user_meta($user_id, '_user_cpf')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required name="cpf" pattern="([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})" value="' . ( isset( get_user_meta($user_id, '_user_cpf')[0] ) ? esc_attr( get_user_meta($user_id, '_user_cpf')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'E-mail * <br />';
-    echo '<input type="email" required="required" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value="' . ( isset( get_user_meta($user_id, '_user_email')[0] ) ? esc_attr( get_user_meta($user_id, '_user_email')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="email" required name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value="' . ( isset( get_user_meta($user_id, '_user_email')[0] ) ? esc_attr( get_user_meta($user_id, '_user_email')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'Telefone * <br />';
-    echo '<input type="tel" required="required" name="telefone" maxlength="15" pattern="\([0-9]{2}\) [0-9]{4,6}-[0-9]{3,4}$" value="' . ( isset( get_user_meta($user_id, '_user_telefone')[0] ) ? esc_attr( get_user_meta($user_id, '_user_telefone')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="tel" required name="telefone" maxlength="15" value="' . ( isset( get_user_meta($user_id, '_user_telefone')[0] ) ? esc_attr( get_user_meta($user_id, '_user_telefone')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo ' * <br />';
-    echo '<input type="text" name="municipio" required="required" value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" name="municipio" required value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'UF * <br />';
-    echo '<input type="text" required="required" name="uf" value="' . ( isset( get_user_meta($user_id, '_user_uf')[0]) ? esc_attr( get_user_meta($user_id, '_user_uf')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required name="uf" value="' . ( isset( get_user_meta($user_id, '_user_uf')[0]) ? esc_attr( get_user_meta($user_id, '_user_uf')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
 
     echo '<p>';
     // representatividade
 
-    $representatividade = get_user_meta($user_id, '_user_representatividade');
-    if (count($representatividade) > 0){$representatividade = $representatividade[0];}
+    $representatividade = get_user_meta($user_id, '_user_representatividade', true);
 
     echo 'Representatividade: * <br>';
-    echo '<input type="radio" name="representatividade" value="plenaria" ' . ( $representatividade === 'plenaria' ?  'checked': '' ) . '>Plenária   ';
+    echo '<input type="radio" name="representatividade" value="Plenária" ' . ( $representatividade === 'Plenária' ?  'checked': '' ) . ' required>Plenária   ';
     echo '<input type="text" placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" /><br>';
-    echo '<input type="radio" name="representatividade" value="setorial" ' . ( $representatividade === 'setorial' ?  'checked': '' ) . '>Setorial   ';
+    echo '<input type="radio" name="representatividade" value="Setorial" ' . ( $representatividade === 'setorial' ?  'checked': '' ) . '>Setorial   ';
     echo '<input type="text" placeholder="Digite aqui a sua área" name="setorial_area" value="' . ( isset( get_user_meta($user_id, '_user_setorial_area')[0] ) ? esc_attr( get_user_meta($user_id, '_user_setorial_area')[0] ) : '' ) . '" size="40" /><br>';
-    echo '<input type="radio" name="representatividade" value="sociedade" ' . ( $representatividade === 'sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
+    echo '<input type="radio" name="representatividade" value="Sociedade" ' . ( $representatividade === 'Sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
 
     // relatório
     echo "<h4>Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco: </h4>";
 
-    $relatorio = get_user_meta($user_id, '_user_relatorio');
-    if (count($relatorio) > 0){$relatorio = $relatorio[0];}
+    $relatorio_radio = get_user_meta($user_id, '_user_relatorio_radio', true);
 
-    echo '<input type="radio" name="relatorio" value="concordo" ' . ( $relatorio === 'concordo' ?  'checked': '' ) . '>Concordo com o relatório apresentado<br>';
-    echo '<input type="radio" name="relatorio" value="concordo_comentar" ' . ( $relatorio === 'concordo_comentar' ?  'checked': '' ) . '>Concordo mas Gostaria de Comentar  <br>';
-    echo '<input type="radio" name="relatorio" value="discordo_comentar" ' . ( $relatorio === 'discordo_comentar' ?  'checked': '' ) . '>Não concordo<br>';    
-
+    echo '<input type="radio" name="relatorio_radio" value="Concordo com o relatório apresentado" ' . ( $relatorio_radio === 'Concordo com o relatório apresentado' ?  'checked': '' ) . ' required>Concordo com o relatório apresentado<br>';
+    echo '<input type="radio" name="relatorio_radio" value="Concordo mas Gostaria de Comentar" ' . ( $relatorio_radio === 'Concordo mas Gostaria de Comentar' ?  'checked': '' ) . '>Concordo mas Gostaria de Comentar  <br>';
+    echo '<input type="radio" name="relatorio_radio" value="Não concordo" ' . ( $relatorio_radio === 'Não concordo' ?  'checked': '' ) . '>Não concordo<br>';    
+    echo '<textarea maxlength="2100" rows="10" cols="70" name="relatorio" placeholder="Máximo de 2100 caracteres" >' . ( get_user_meta($user_id, '_user_relatorio', true) !== null ? esc_attr( get_user_meta($user_id, '_user_relatorio', true) ) : '' ) . '</textarea>';
     // cabeçalho
 
     echo "<h4>A sociedade civil tomou iniciativas para: </h4>";
 
     // 1 ok
 
-    $primeira_radio = get_user_meta($user_id, '_user_primeira_radio');
-    if (count($primeira_radio) > 0){$primeira_radio = $primeira_radio[0];}
-
     echo $cabecalho_primeira;
-    echo '<input type="radio" name="primeira_radio" value="concordo" ' . ( $primeira_radio === 'concordo' ?  'checked': '' ) . '>concordo<br>';
-    echo '<input type="radio" name="primeira_radio" value="concordo_comentar" ' . ( $primeira_radio === 'concordo_comentar' ?  'checked': '' ) . '>concordo e quero comentar<br>';
-    echo '<input type="radio" name="primeira_radio" value="discordo_comentar" ' . ( $primeira_radio === 'discordo_comentar' ?  'checked': '' ) . '>discordo e quero comentar<br>';
     echo '<textarea maxlength="2100" rows="10" cols="70" name="primeira" placeholder="Máximo de 2100 caracteres" >' . ( isset( get_user_meta($user_id, '_user_primeira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_primeira')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     // 2
 
     echo $cabecalho_segunda;
-    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="segunda"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_segunda')[0] ) ? esc_attr( get_user_meta($user_id, '_user_segunda')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="segunda"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_segunda')[0] ) ? esc_attr( get_user_meta($user_id, '_user_segunda')[0] ) : '' ) . '</textarea>';
     echo '</p>';
     
     // 3
     
     echo $cabecalho_terceira;
-    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="terceira"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_terceira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_terceira')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="terceira"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_terceira')[0] ) ? esc_attr( get_user_meta($user_id, '_user_terceira')[0] ) : '' ) . '</textarea>';
     echo '</p>';
+    
     // 4
+    
     echo $cabecalho_quarta;
-    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="quarta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quarta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quarta')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="quarta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quarta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quarta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
+    
     // 5
+    
     echo $cabecalho_quinta;
-    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="quinta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quinta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quinta')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="quinta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_quinta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_quinta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
+    
     // 6
+    
     echo $cabecalho_sexta;
-    echo '<textarea maxlength="2100" required="required" rows="10" cols="70" name="sexta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_sexta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_sexta')[0] ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="sexta"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_sexta')[0] ) ? esc_attr( get_user_meta($user_id, '_user_sexta')[0] ) : '' ) . '</textarea>';
     echo '</p>';
+    
+    // desafio 
+
+    echo $cabecalho_desafio;
+
+    // desafio 1
+
+    echo "Desafio 1 <br>";
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="desafio1"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_desafio1')[0] ) ? esc_attr( get_user_meta($user_id, '_user_desafio1')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
+    
+    // desafio 2
+    
+    echo "Desafio 2 <br>";
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="desafio2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_desafio2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_desafio2')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
+    
+    // solucao
+
+    echo $cabecalho_solucao;
+
+    // solucao 1
+    
+    echo "Solução 1 <br>";
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="solucao1"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_solucao1')[0] ) ? esc_attr( get_user_meta($user_id, '_user_solucao1')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
+    
+    // solucao 2
+    
+    echo "Solução 2 <br>";
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="solucao2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_solucao2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_solucao2')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
+
+    // atividade
+
+    echo $cabecalho_atividade;
+
+    // atividade 1
+    
+    echo "Atividade 1 <br>";
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade1"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_atividade1')[0] ) ? esc_attr( get_user_meta($user_id, '_user_atividade1')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
+    
+    // atividade 2
+    
+    echo "Atividade 2 <br>";
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_atividade2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_atividade2')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
+
     ?>
-	<div class="attach">
-		<div class="att-block">
-			<label for="att" class="att-item-label">
-				<div class="att-item-title"><?php _e('Anexar Documento'); ?>
-   				</div>
-			</label> <input type="file" name="att" id="att"
-				value="<?php ?>"
-				class="file-upload">
-	    </div>
-	</div><?php
-		echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
-		echo '</form>';
-	}
-	elseif(is_user_logged_in() 
+    <div class="attach">
+    	<div class="att-block">
+    		<label for="att" class="att-item-label">
+    			<div class="att-item-title"><?php _e('Anexar Documento'); ?>
+     			</div>
+    		</label>
+    		<input type="file" name="att" id="att"
+    			value="<?php ?>"
+    			class="file-upload"
+    		>
+        </div>
+    </div><?php
+    
+    // botao de enviar
+
+    echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
+    echo '</form>';
+  }
+  elseif(is_user_logged_in() 
       && isset($_POST["nome"]) 
+      && isset($_POST["cpf"]) 
+      && isset($_POST["email"])
+      && isset($_POST["telefone"])
       && isset($_POST["municipio"]) 
       && isset($_POST["uf"]) 
-      && isset($_POST["cpf"]) 
+      && isset($_POST["representatividade"]) 
+      && isset($_POST["relatorio_radio"])
+      && isset($_POST["relatorio"])
+      && isset($_POST["setorial_area"])
       && isset($_POST["instituicao"]) 
       && isset($_POST["primeira"]) 
       && isset($_POST["segunda"]) 
@@ -435,56 +495,23 @@ function consultas_html_form_code() {
       && isset($_POST["quarta"]) 
       && isset($_POST["quinta"]) 
       && isset($_POST["sexta"])
+      && isset($_POST["desafio1"])
+      && isset($_POST["desafio2"])
+      && isset($_POST["solucao1"])
+      && isset($_POST["solucao2"])
+      && isset($_POST["atividade1"])
+      && isset($_POST["atividade2"])
     )
   {
-		
-  	$attach_id = array();
-  	$attach = array();
-  	$message = array(); //TODO error parser
-  	$notice = false;
-  	
-  	$has_att = true;
-  	
-  	if ($_FILES)
-  	{
-  		if (!function_exists('wp_generate_attachment_metadata')){
-  			require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-  			require_once(ABSPATH . "wp-admin" . '/includes/file.php');
-  			require_once(ABSPATH . "wp-admin" . '/includes/media.php');
-  		}
-  		foreach ($_FILES as $file => $array)
-  		{
-  			if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK && $_FILES[$file]['error'] !== UPLOAD_ERR_NO_FILE )
-  			{
-  				switch($file)
-  				{
-  					case 'att':
-  					default:
-  						$message[] = __('Erro ao registrar anexo');
-  						$has_att = false;
-  						break;
-  				}
-  	
-  				$notice = true;
-  			}
-  			elseif( $_FILES[$file]['error'] == UPLOAD_ERR_OK )
-  			{
-  				$attach_id[$file] = media_handle_upload( $file, 0 );
-  				$attach[$file] = wp_get_attachment_url($attach_id[$file]);
-  			}
-  		}
-  	}
-    //delete_post_meta(et_current_user_id(),'_users_voto');
+    
+    // insere os id's dos usuários em um array, com isso sabemos qual foi a opnião do usuário
     $data = get_post_meta(get_the_ID(), '_users_voto', true);
-    //var_dump($data);
     if( $data != "" ) {
       if ( !in_array( get_current_user_id(), $data ) ) {
         $data[] = get_current_user_id();
       }
-      //var_dump($data);
       $data = array_unique($data); // remove duplicates
       sort( $data ); // sort array
-      //var_dump($data);
       update_post_meta(get_the_ID(), '_users_voto', $data);
     }
     else {
@@ -494,21 +521,70 @@ function consultas_html_form_code() {
       update_post_meta(get_the_ID(),'_users_voto' , $data);
     }
 
+    // atualiza nos campos meta do usuário o seu voto
+    // informações do usuário
     update_user_meta( $user_id, '_user_nome', $_POST["nome"]);
     update_user_meta( $user_id, '_user_cpf', $_POST["cpf"]);
+    update_user_meta( $user_id, '_user_email', $_POST["email"]);
+    update_user_meta( $user_id, '_user_telefone', $_POST["telefone"]);
     update_user_meta( $user_id, '_user_municipio', $_POST["municipio"]);
     update_user_meta( $user_id, '_user_uf', $_POST["uf"]);
-
+    update_user_meta( $user_id, '_user_representatividade', $_POST["representatividade"]);
     update_user_meta( $user_id, '_user_instituicao', $_POST["instituicao"]);
-    update_post_meta( $user_id, '_user_relatorio_radio', $_POST["relatorio_radio"]);
-    update_post_meta( $user_id, '_user_relatorio', $_POST["relatorio"]);
-    update_user_meta( $user_id, '_user_primeira_radio', $_POST["primeira_radio"]);
+    update_user_meta( $user_id, '_user_setorial_area', $_POST["setorial_area"]);
+    // informações de voto do usuário
+    update_user_meta( $user_id, '_user_relatorio_radio', $_POST["relatorio_radio"]);
+    update_user_meta( $user_id, '_user_relatorio', $_POST["relatorio"]);
     update_user_meta( $user_id, '_user_primeira', $_POST["primeira"]);
     update_user_meta( $user_id, '_user_segunda', $_POST["segunda"]);
     update_user_meta( $user_id, '_user_terceira', $_POST["terceira"]);
     update_user_meta( $user_id, '_user_quarta', $_POST["quarta"]);
     update_user_meta( $user_id, '_user_quinta', $_POST["quinta"]);
     update_user_meta( $user_id, '_user_sexta', $_POST["sexta"]);
+    update_user_meta( $user_id, '_user_desafio1', $_POST["desafio1"]);
+    update_user_meta( $user_id, '_user_desafio2', $_POST["desafio2"]);
+    update_user_meta( $user_id, '_user_solucao1', $_POST["solucao1"]);
+    update_user_meta( $user_id, '_user_solucao2', $_POST["solucao2"]);
+    update_user_meta( $user_id, '_user_atividade1', $_POST["atividade1"]);
+    update_user_meta( $user_id, '_user_atividade2', $_POST["atividade2"]);
+    
+    
+    $attach_id = array();
+    $attach = array();
+    $message = array(); //TODO error parser
+    $notice = false;
+     
+    $has_att = true;
+     
+    if ($_FILES)
+    {
+    	if (!function_exists('wp_generate_attachment_metadata')){
+    		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+    		require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+    		require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+    	}
+    	foreach ($_FILES as $file => $array)
+    	{
+    		if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK && $_FILES[$file]['error'] !== UPLOAD_ERR_NO_FILE )
+    		{
+    			switch($file)
+    			{
+    				case 'att':
+    				default:
+    					$message[] = __('Erro ao registrar anexo');
+    					$has_att = false;
+    					break;
+    			}
+    			 
+    			$notice = true;
+    		}
+    		elseif( $_FILES[$file]['error'] == UPLOAD_ERR_OK )
+    		{
+    			$attach_id[$file] = media_handle_upload( $file, 0 );
+    			$attach[$file] = wp_get_attachment_url($attach_id[$file]);
+    		}
+    	}
+    }
     
     // can we have more attachment in future
     foreach ($attach_id as $key => $value)
@@ -531,25 +607,33 @@ function consultas_html_form_code() {
         $cabecalho_terceira,
         $cabecalho_quarta,
         $cabecalho_quinta,
-        $cabecalho_sexta
+        $cabecalho_sexta,
+        $cabecalho_desafio,
+        $cabecalho_solucao,
+        $cabecalho_atividade
       );
     echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input type="submit" name="editar" value="editar"></form>';
     $_POST = '';
 
   }
   elseif( is_user_logged_in()
-       && isset(get_user_meta($user_id, '_user_nome')[0])
-       && isset(get_user_meta($user_id, '_user_municipio')[0])
-       && isset(get_user_meta($user_id, '_user_uf')[0])
-       && isset(get_user_meta($user_id, '_user_cpf')[0])
-       && isset(get_user_meta($user_id, '_user_instituicao')[0])
-       && isset(get_user_meta($user_id, '_user_primeira_radio')[0])
-       && isset(get_user_meta($user_id, '_user_primeira')[0])
-       && isset(get_user_meta($user_id, '_user_segunda')[0])
-       && isset(get_user_meta($user_id, '_user_terceira')[0])
-       && isset(get_user_meta($user_id, '_user_quarta')[0])
-       && isset(get_user_meta($user_id, '_user_quinta')[0])
-       && isset(get_user_meta($user_id, '_user_sexta')[0])
+       && get_user_meta($user_id, '_user_nome', true) !== null
+       && get_user_meta($user_id, '_user_municipio', true) !== null
+       && get_user_meta($user_id, '_user_uf', true) !== null
+       && get_user_meta($user_id, '_user_cpf', true)!== null
+       && get_user_meta($user_id, '_user_instituicao', true) !== null
+       && get_user_meta($user_id, '_user_primeira', true) !== null
+       && get_user_meta($user_id, '_user_segunda', true) !== null
+       && get_user_meta($user_id, '_user_terceira', true) !== null
+       && get_user_meta($user_id, '_user_quarta', true) !== null
+       && get_user_meta($user_id, '_user_quinta', true) !== null
+       && get_user_meta($user_id, '_user_sexta', true) !== null
+       && get_user_meta($user_id, '_user_desafio1', true) !== null
+       && get_user_meta($user_id, '_user_desafio2', true) !== null
+       && get_user_meta($user_id, '_user_solucao1', true) !== null
+       && get_user_meta($user_id, '_user_solucao2', true) !== null
+       && get_user_meta($user_id, '_user_atividade1', true) !== null
+       && get_user_meta($user_id, '_user_atividade2', true) !== null
     )
   {
 
@@ -561,7 +645,10 @@ function consultas_html_form_code() {
         $cabecalho_terceira,
         $cabecalho_quarta,
         $cabecalho_quinta,
-        $cabecalho_sexta
+        $cabecalho_sexta,
+        $cabecalho_desafio,
+        $cabecalho_solucao,
+        $cabecalho_atividade
       );
     echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input type="submit" name="editar" value="editar"></form>';
 
@@ -581,15 +668,17 @@ function consultas_html_form_code() {
       echo "<br>";
       echo "<br>";
 
-      consulta_respostas($user_id, 
+    consulta_respostas($user_id, 
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
         $cabecalho_quarta,
         $cabecalho_quinta,
-        $cabecalho_sexta
+        $cabecalho_sexta,
+        $cabecalho_desafio,
+        $cabecalho_solucao,
+        $cabecalho_atividade
       );
-
     }
   }
 
@@ -602,54 +691,96 @@ function consulta_respostas($user_id,
     $cabecalho_terceira, 
     $cabecalho_quarta, 
     $cabecalho_quinta, 
-    $cabecalho_sexta
+    $cabecalho_sexta,
+    $cabecalho_desafio,
+    $cabecalho_solucao,
+    $cabecalho_atividade
   )
 {
     //dados do usuário
 
     echo "<strong>Nome: </strong><br>";
-    echo get_user_meta($user_id, '_user_nome')[0];
+    echo get_user_meta($user_id, '_user_nome', true);
     echo "<br>";
     echo "<strong>Estado:</strong><br>";
-    echo get_user_meta($user_id, '_user_uf')[0];
+    echo get_user_meta($user_id, '_user_uf', true);
     echo "<br>";
 
     // 1
     
     echo $cabecalho_primeira;
-    echo get_user_meta($user_id, '_user_primeira_radio')[0];
-    echo "<br>";
-    echo get_user_meta($user_id, '_user_primeira')[0];
+    echo get_user_meta($user_id, '_user_primeira', true);
     echo "<br>";
     
     // 2
     
     echo $cabecalho_segunda;
-    echo get_user_meta($user_id, '_user_segunda')[0];
+    echo get_user_meta($user_id, '_user_segunda', true);
     echo "<br>";
 
     // 3
     
     echo $cabecalho_terceira;
-    echo get_user_meta($user_id, '_user_terceira')[0];
+    echo get_user_meta($user_id, '_user_terceira', true);
     echo "<br>";
     
     // 4
     
     echo $cabecalho_quarta;
-    echo get_user_meta($user_id, '_user_quarta')[0];
+    echo get_user_meta($user_id, '_user_quarta', true);
     echo "<br>";
     
     // 5
     
     echo $cabecalho_quinta;
-    echo get_user_meta($user_id, '_user_quinta')[0];
+    echo get_user_meta($user_id, '_user_quinta', true);
     echo "<br>";
 
     // 6
     
     echo $cabecalho_sexta;
-    echo get_user_meta($user_id, '_user_sexta')[0];
+    echo get_user_meta($user_id, '_user_sexta', true);
+    echo "<br>";
+
+    // desafio
+
+    echo $cabecalho_desafio;
+
+    // desafio 1
+
+    echo get_user_meta($user_id, '_user_desafio1', true);
+    echo "<br>";
+
+    // desafio 2
+
+    echo get_user_meta($user_id, '_user_desafio2', true);
+    echo "<br>";
+
+    // solucao
+
+    echo $cabecalho_solucao;
+
+    // sollucao 1
+
+    echo get_user_meta($user_id, '_user_solucao1', true);
+    echo "<br>";
+
+    // solucao 2
+    
+    echo get_user_meta($user_id, '_user_solucao2', true);
+    echo "<br>";
+    // atividade
+
+    echo $cabecalho_atividade;
+
+    // atividade 1
+
+    echo get_user_meta($user_id, '_user_atividade1', true);
+    echo "<br>";
+
+    // atividade 2
+
+    echo get_user_meta($user_id, '_user_atividade2', true);
     echo "<br>";
 }
 
