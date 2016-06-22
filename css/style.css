@@ -36,3 +36,15 @@ span.post-meta-key {
 .seu-voto .content_respostas {
     width: 100%;
 }
+
+.relatorio-link {
+    background-color: #ffb73c;
+    border-radius: 10px;
+    color: #2e4223;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.relatorio-link:hover {
+    background-color: #ffc45e;
+}

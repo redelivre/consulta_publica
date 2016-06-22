@@ -345,7 +345,7 @@ function consultas_html_form_code() {
     // relatório
     echo '<h4>'.$cabecalho_etapa1.'</h4>';
     echo '<br>';
-    echo '<a href="/wp-content/plugins/consulta_publica/files/RELATÓRIO_QUADRIENAL_UNESCO.pdf" target="_blank">Acesse o relatório aqui</a><br>';
+    echo '<a class="relatorio-link" href="/wp-content/plugins/consulta_publica/files/RELATÓRIO_QUADRIENAL_UNESCO.pdf" target="_blank">Acesse o relatório aqui</a><br>';
     echo '<br>';
     $relatorio_radio = get_user_meta($user_id, '_user_relatorio_radio', true);
 
@@ -493,16 +493,16 @@ function consultas_html_form_code() {
     $data = get_post_meta(get_the_ID(), '_users_voto', true);
     if( $data != "" ) {
       if ( !in_array( get_current_user_id(), $data ) ) {
-        $data[] = get_current_user_id();
+        $data[time()] = get_current_user_id();
       }
       $data = array_unique($data); // remove duplicates
-      sort( $data ); // sort array
+      krsort( $data ); // sort array
       update_post_meta(get_the_ID(), '_users_voto', $data);
     }
     else {
       $data = array();
       $user = get_current_user_id();
-      array_push($data, $user);
+      $data[time()] = $user;
       update_post_meta(get_the_ID(),'_users_voto' , $data);
     }
 
