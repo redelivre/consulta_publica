@@ -330,7 +330,7 @@ function consultas_html_form_code() {
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data">';
     echo '<p>';
     echo 'Nome * <br />';
     echo '<input type="text" name="nome" required value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
@@ -459,6 +459,20 @@ function consultas_html_form_code() {
     echo '<textarea maxlength="2100" required rows="10" cols="70" name="atividade2"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_atividade2')[0] ) ? esc_attr( get_user_meta($user_id, '_user_atividade2')[0] ) : '' ) . '</textarea>';
     echo '</p>';
 
+    ?>
+    <div class="attach">
+    	<div class="att-block">
+    		<label for="att" class="att-item-label">
+    			<div class="att-item-title"><?php _e('Anexar Documento'); ?>
+     			</div>
+    		</label>
+    		<input type="file" name="att" id="att"
+    			value="<?php ?>"
+    			class="file-upload"
+    		>
+        </div>
+    </div><?php
+    
     // botao de enviar
 
     echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
@@ -533,7 +547,59 @@ function consultas_html_form_code() {
     update_user_meta( $user_id, '_user_solucao1', $_POST["solucao1"]);
     update_user_meta( $user_id, '_user_solucao2', $_POST["solucao2"]);
     update_user_meta( $user_id, '_user_atividade1', $_POST["atividade1"]);
-    update_user_meta( $user_id, '_user_atividade2', $_POST["atividade2"]);
+    update_user_meta( $user_id, '_user_atividade2', $_POST["atividade2"]);   
+    
+    $attach_id = array();
+    $attach = array();
+    $message = array(); //TODO error parser
+    $notice = false;
+     
+    $has_att = true;
+     
+    if ($_FILES)
+    {
+    	if (!function_exists('wp_generate_attachment_metadata')){
+    		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+    		require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+    		require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+    	}
+    	foreach ($_FILES as $file => $array)
+    	{
+    		if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK && $_FILES[$file]['error'] !== UPLOAD_ERR_NO_FILE )
+    		{
+    			switch($file)
+    			{
+    				case 'att':
+    				default:
+    					$message[] = __('Erro ao registrar anexo');
+    					$has_att = false;
+    					break;
+    			}
+    			 
+    			$notice = true;
+    		}
+    		elseif( $_FILES[$file]['error'] == UPLOAD_ERR_OK )
+    		{
+    			$attach_id[$file] = media_handle_upload( $file, 0 );
+    			$attach[$file] = wp_get_attachment_url($attach_id[$file]);
+    		}
+    	}
+    }
+    
+    // can we have more attachment in future
+    foreach ($attach_id as $key => $value)
+    {
+    	//and if you want to set that image as Post  then use:
+    	if($key == 'att' && $has_att)
+    	{
+    		if( ! update_user_meta($user_id,'_user_att1', $attach_id[$key]))
+    		{
+    			$message[] = __('Erro ao gravar anexo', 'pontosdecultura');
+    			$notice = true;
+    		}
+    	}
+    }
+
     echo "<h2>Voto inserido com sucesso!</h2><br>";
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
@@ -736,6 +802,14 @@ function consulta_respostas($user_id,
 
     echo get_user_meta($user_id, '_user_atividade2', true);
     echo "<br>";
+    
+    $att_id = get_user_meta($user_id, '_user_att1', true);
+    if($att_id)
+    {
+	    echo '<br/><strong>Documentos Anexados:</strong><br/>';
+	    echo wp_get_attachment_link($att_id);
+    }
+    echo '<br><br>';
 }
 
 //add_shortcode('perguntas', 'consultas_html_form_code');
