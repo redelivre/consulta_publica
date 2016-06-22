@@ -290,7 +290,8 @@ function consultas_custom_admin_menu() {
 
 function consultas_html_form_code() {
   $user_id = get_current_user_id();
-  $cabecalho_relatorio = '<strong>Etapa 1 - Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco:</strong> <br>';
+  $cabecalho_etapa1 = '<strong>Etapa 1 - Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco:</strong><br>';
+  $cabecalho_etapa2 = '<strong>Etapa 2 - A sociedade civil tomou iniciativas para:</strong><br>';
   $cabecalho_primeira = '<strong>Promover os princípios e objetivos da Convenção local e internacionalmente. (Como?) *</strong> <br/>';
   $cabecalho_segunda = '<strong>Levar as preocupações dos cidadãos, associações e empresas às autoridades públicas, incluindo as de grupos vulneráveis (Como?) *</strong> <br/>';
   $cabecalho_terceira = '<strong>Contribui para a realização de uma maior transparência e prestação de contas na governança cultural (Como?) *</strong> <br/>';
@@ -343,7 +344,7 @@ function consultas_html_form_code() {
     echo 'Telefone * <br />';
     echo '<input type="tel" required name="telefone" maxlength="15" value="' . ( isset( get_user_meta($user_id, '_user_telefone')[0] ) ? esc_attr( get_user_meta($user_id, '_user_telefone')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
-    echo ' * <br />';
+    echo ' Cidade * <br />';
     echo '<input type="text" name="municipio" required value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'UF * <br />';
@@ -363,7 +364,7 @@ function consultas_html_form_code() {
     echo '<input type="radio" name="representatividade" value="Sociedade" ' . ( $representatividade === 'Sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
 
     // relatório
-    echo "<h4>Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco: </h4>";
+    echo '<h4>'.$cabecalho_etapa1.'</h4>';
 
     $relatorio_radio = get_user_meta($user_id, '_user_relatorio_radio', true);
 
@@ -372,8 +373,8 @@ function consultas_html_form_code() {
     echo '<input type="radio" name="relatorio_radio" value="Não concordo" ' . ( $relatorio_radio === 'Não concordo' ?  'checked': '' ) . '>Não concordo<br>';    
     echo '<textarea maxlength="2100" rows="10" cols="70" name="relatorio" placeholder="Máximo de 2100 caracteres" >' . ( get_user_meta($user_id, '_user_relatorio', true) !== null ? esc_attr( get_user_meta($user_id, '_user_relatorio', true) ) : '' ) . '</textarea>';
     // cabeçalho
-
-    echo "<h4>A sociedade civil tomou iniciativas para: </h4>";
+    echo '<br>';
+    echo '<h4>'.$cabecalho_etapa2.'</h4>';
 
     // 1 ok
 
@@ -533,9 +534,9 @@ function consultas_html_form_code() {
     update_user_meta( $user_id, '_user_solucao2', $_POST["solucao2"]);
     update_user_meta( $user_id, '_user_atividade1', $_POST["atividade1"]);
     update_user_meta( $user_id, '_user_atividade2', $_POST["atividade2"]);
-
     echo "<h2>Voto inserido com sucesso!</h2><br>";
     consulta_respostas($user_id, 
+        $cabecalho_etapa1,
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
@@ -555,7 +556,11 @@ function consultas_html_form_code() {
        && get_user_meta($user_id, '_user_municipio', true) !== null
        && get_user_meta($user_id, '_user_uf', true) !== null
        && get_user_meta($user_id, '_user_cpf', true)!== null
+       && get_user_meta($user_id, '_user_representatividade', true)!== null
+       && get_user_meta($user_id, '_user_relatorio_radio', true)!== null
+       && get_user_meta($user_id, '_user_relatorio', true)!== null
        && get_user_meta($user_id, '_user_instituicao', true) !== null
+       && get_user_meta($user_id, '_user_setorial_area', true) !== null
        && get_user_meta($user_id, '_user_primeira', true) !== null
        && get_user_meta($user_id, '_user_segunda', true) !== null
        && get_user_meta($user_id, '_user_terceira', true) !== null
@@ -574,6 +579,7 @@ function consultas_html_form_code() {
     echo "Veja abaixo seu voto: <br>";
     
     consulta_respostas($user_id, 
+        $cabecalho_etapa1,
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
@@ -602,7 +608,8 @@ function consultas_html_form_code() {
       echo "<br>";
       echo "<br>";
 
-    consulta_respostas($user_id, 
+    consulta_respostas($user, 
+        $cabecalho_etapa1,
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
@@ -620,6 +627,7 @@ function consultas_html_form_code() {
 }
 
 function consulta_respostas($user_id, 
+    $cabecalho_etapa1,
     $cabecalho_primeira, 
     $cabecalho_segunda, 
     $cabecalho_terceira, 
@@ -639,6 +647,18 @@ function consulta_respostas($user_id,
     echo "<strong>Estado:</strong><br>";
     echo get_user_meta($user_id, '_user_uf', true);
     echo "<br>";
+
+    // etapa 1 - relatorio
+
+    echo $cabecalho_etapa1;
+    echo get_user_meta($user_id, '_user_relatorio_radio', true);
+    echo '<br>';
+    echo get_user_meta($user_id, '_user_relatorio', true);
+    echo '<br>';
+
+    // etapa 2 - questionario
+
+    // echo $cabecalho_etapa2
 
     // 1
     
