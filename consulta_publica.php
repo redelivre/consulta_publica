@@ -329,7 +329,7 @@ function consultas_html_form_code() {
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data">';
     echo '<p>';
     echo 'Nome * <br />';
     echo '<input type="text" name="nome" required value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
@@ -590,9 +590,9 @@ function consultas_html_form_code() {
     foreach ($attach_id as $key => $value)
     {
     	//and if you want to set that image as Post  then use:
-    	if($key == 'att' && $has_thumbnail)
+    	if($key == 'att' && $has_att)
     	{
-    		if( ! update_user_meta($post_ID,'_user_att1', $attach_id[$key]))
+    		if( ! update_user_meta($user_id,'_user_att1', $attach_id[$key]))
     		{
     			$message[] = __('Erro ao gravar anexo', 'pontosdecultura');
     			$notice = true;
@@ -782,6 +782,13 @@ function consulta_respostas($user_id,
 
     echo get_user_meta($user_id, '_user_atividade2', true);
     echo "<br>";
+    
+    $att_id = get_user_meta($user_id, '_user_att1', true);
+    if($att_id)
+    {
+	    echo '<br/><strong>Documentos Anexados:</strong><br/>';
+	    echo wp_get_attachment_link($att_id);
+    }
 }
 
 //add_shortcode('perguntas', 'consultas_html_form_code');
