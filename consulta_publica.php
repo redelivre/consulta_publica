@@ -444,6 +444,7 @@ function consultas_html_form_code() {
     	<div class="att-block">
     		<label for="att" class="att-item-label">
     			<div class="att-item-title"><strong><?php _e('Documentos de apoio fornecidos pela Sociedade Civil (upload de pdf ou descrição)'); ?></strong>
+          <p>Complemente as informações se achar necessário. Campos não obrigatórios.</p>
      			</div><br/>
     		</label>
     		<input type="file" name="att" id="att"
@@ -452,8 +453,9 @@ function consultas_html_form_code() {
     		>
         </div>
     </div><br><?php
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres">' . ( get_user_meta($user_id, '_user_documentosapoio', true) != '' ? esc_attr( get_user_meta($user_id, '_user_documentosapoio', true) ) : '' ) . '</textarea>';
+    echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres, ">' . ( get_user_meta($user_id, '_user_documentosapoio', true) != '' ? esc_attr( get_user_meta($user_id, '_user_documentosapoio', true) ) : '' ) . '</textarea>';
     echo '</p>';
+    echo 'Dúvidas sobre o sistema de consulta: <a href="mailto:laboratoriodeculturadigital@gmai.com">laboratoriodeculturadigital@gmai.com</a><br><br>';
     // botao de enviar
 
     echo '<p><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="enviar" value="Enviar"/></p>';
