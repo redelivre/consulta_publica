@@ -342,7 +342,7 @@ function consultas_html_form_code() {
     echo '<input type="email" required name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value="' . ( isset( get_user_meta($user_id, '_user_email')[0] ) ? esc_attr( get_user_meta($user_id, '_user_email')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo 'Telefone * <br />';
-    echo '<input type="tel" required name="telefone" maxlength="15" value="' . ( isset( get_user_meta($user_id, '_user_telefone')[0] ) ? esc_attr( get_user_meta($user_id, '_user_telefone')[0] ) : '' ) . '" size="40" />';
+    echo '<input type="text" required name="telefone" maxlength="15" value="' . ( isset( get_user_meta($user_id, '_user_telefone')[0] ) ? esc_attr( get_user_meta($user_id, '_user_telefone')[0] ) : '' ) . '" size="40" />';
     echo '</p>';
     echo ' Cidade * <br />';
     echo '<input type="text" name="municipio" required value="' . ( isset( get_user_meta($user_id, '_user_municipio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_municipio')[0] ) : '' ) . '" size="40" />';
@@ -357,21 +357,21 @@ function consultas_html_form_code() {
     $representatividade = get_user_meta($user_id, '_user_representatividade', true);
 
     echo 'Representatividade: * <br>';
-    echo '<input type="radio" name="representatividade" value="Plenária" ' . ( $representatividade === 'Plenária' ?  'checked': '' ) . ' required>Plenária   ';
-    echo '<input type="text" placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" /><br>';
-    echo '<input type="radio" name="representatividade" value="Setorial" ' . ( $representatividade === 'setorial' ?  'checked': '' ) . '>Setorial   ';
-    echo '<input type="text" placeholder="Digite aqui a sua área" name="setorial_area" value="' . ( isset( get_user_meta($user_id, '_user_setorial_area')[0] ) ? esc_attr( get_user_meta($user_id, '_user_setorial_area')[0] ) : '' ) . '" size="40" /><br>';
-    echo '<input type="radio" name="representatividade" value="Sociedade" ' . ( $representatividade === 'Sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
+    echo '<input type="radio" id="plenaria" onclick="showInstituicao()" name="representatividade" value="Plenária" ' . ( $representatividade === 'Plenária' ?  'checked': '' ) . ' required>Plenária ';
+    echo '<input type="text" id="instituicao" ' . ( $representatividade === 'Plenária' ?  '':'style="visibility:hidden"' ) . ' placeholder="Digite aqui a sua instituição" name="instituicao" value="' . ( isset( get_user_meta($user_id, '_user_instituicao')[0] ) ? esc_attr( get_user_meta($user_id, '_user_instituicao')[0] ) : '' ) . '" size="40" /><br>';
+    echo '<input type="radio" id="setorial" onclick="showArea()" name="representatividade" value="Setorial" ' . ( $representatividade === 'setorial' ?  'checked': '' ) . '>Setorial ';
+    echo '<input type="text" id="setorial_area" ' . ( $representatividade === 'setorial' ?  '':'style="visibility:hidden"' ) . ' name="setorial_area" placeholder="Digite aqui a sua área" value="' . ( isset( get_user_meta($user_id, '_user_setorial_area')[0] ) ? esc_attr( get_user_meta($user_id, '_user_setorial_area')[0] ) : '' ) . '" size="40" /><br>';
+    echo '<input type="radio" onclick="hideAll()" name="representatividade" value="Sociedade" ' . ( $representatividade === 'Sociedade' ?  'checked': '' ) . '>Sociedade Civil<br>';
 
     // relatório
     echo '<h4>'.$cabecalho_etapa1.'</h4>';
 
     $relatorio_radio = get_user_meta($user_id, '_user_relatorio_radio', true);
 
-    echo '<input type="radio" name="relatorio_radio" value="Concordo com o relatório apresentado" ' . ( $relatorio_radio === 'Concordo com o relatório apresentado' ?  'checked': '' ) . ' required>Concordo com o relatório apresentado<br>';
-    echo '<input type="radio" name="relatorio_radio" value="Concordo mas Gostaria de Comentar" ' . ( $relatorio_radio === 'Concordo mas Gostaria de Comentar' ?  'checked': '' ) . '>Concordo mas Gostaria de Comentar  <br>';
-    echo '<input type="radio" name="relatorio_radio" value="Não concordo" ' . ( $relatorio_radio === 'Não concordo' ?  'checked': '' ) . '>Não concordo<br>';    
-    echo '<textarea maxlength="2100" rows="10" cols="70" name="relatorio" placeholder="Máximo de 2100 caracteres" >' . ( get_user_meta($user_id, '_user_relatorio', true) !== null ? esc_attr( get_user_meta($user_id, '_user_relatorio', true) ) : '' ) . '</textarea>';
+    echo '<input type="radio" onclick="hideEditor()" name="relatorio_radio" value="Concordo com o relatório apresentado" ' . ( $relatorio_radio === 'Concordo com o relatório apresentado' ?  'checked': '' ) . ' required>Concordo com o relatório apresentado<br>';
+    echo '<input type="radio" onclick="showEditor()" name="relatorio_radio" value="Concordo mas Gostaria de Comentar" ' . ( $relatorio_radio === 'Concordo mas Gostaria de Comentar' ?  'checked': '' ) . '>Concordo mas Gostaria de Comentar  <br>';
+    echo '<input type="radio" onclick="showEditor" name="relatorio_radio" value="Não concordo" ' . ( $relatorio_radio === 'Não concordo' ?  'checked': '' ) . '>Não concordo<br>';    
+    echo '<textarea id="editor_etapa1" ' . ( $relatorio_radio === 'Concordo com o relatório apresentado' ?  'style="visibility:hidden"': '' ) . 'maxlength="2100" rows="10" cols="70" name="relatorio" placeholder="Máximo de 2100 caracteres" >' . ( get_user_meta($user_id, '_user_relatorio', true) !== null ? esc_attr( get_user_meta($user_id, '_user_relatorio', true) ) : '' ) . '</textarea>';
     // cabeçalho
     echo '<br>';
     echo '<h4>'.$cabecalho_etapa2.'</h4>';
@@ -471,11 +471,11 @@ function consultas_html_form_code() {
     			class="file-upload"
     		>
         </div>
-    </div><?php
+    </div><br><?php
     
     // botao de enviar
 
-    echo '<p><input type="submit" name="enviar" value="Enviar"/></p>';
+    echo '<p><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="enviar" value="Enviar"/></p>';
     echo '</form>';
   }
   elseif(is_user_logged_in() 
@@ -603,6 +603,7 @@ function consultas_html_form_code() {
     echo "<h2>Voto inserido com sucesso!</h2><br>";
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
+        $cabecalho_etapa2,
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
@@ -613,7 +614,7 @@ function consultas_html_form_code() {
         $cabecalho_solucao,
         $cabecalho_atividade
       );
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input type="submit" name="editar" value="editar"></form>';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="editar" value="editar"></form>';
     $_POST = '';
 
   }
@@ -646,6 +647,7 @@ function consultas_html_form_code() {
     
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
+        $cabecalho_etapa2,
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
@@ -656,7 +658,7 @@ function consultas_html_form_code() {
         $cabecalho_solucao,
         $cabecalho_atividade
       );
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input type="submit" name="editar" value="editar"></form>';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post"><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="editar" value="editar"></form>';
 
   }
   else
@@ -676,6 +678,7 @@ function consultas_html_form_code() {
 
     consulta_respostas($user, 
         $cabecalho_etapa1,
+        $cabecalho_etapa2,
         $cabecalho_primeira,
         $cabecalho_segunda,
         $cabecalho_terceira,
@@ -694,6 +697,7 @@ function consultas_html_form_code() {
 
 function consulta_respostas($user_id, 
     $cabecalho_etapa1,
+    $cabecalho_etapa2,
     $cabecalho_primeira, 
     $cabecalho_segunda, 
     $cabecalho_terceira, 
@@ -713,17 +717,22 @@ function consulta_respostas($user_id,
     echo "<strong>Estado:</strong><br>";
     echo get_user_meta($user_id, '_user_uf', true);
     echo "<br>";
+    echo "<br>";
 
     // etapa 1 - relatorio
 
-    echo $cabecalho_etapa1;
-    echo get_user_meta($user_id, '_user_relatorio_radio', true);
+    echo "<h4>".$cabecalho_etapa1."</h4>";
+    echo "<br>";
+    echo "<strong>".get_user_meta($user_id, '_user_relatorio_radio', true)."</strong>";
     echo '<br>';
+    echo "<br>";
     echo get_user_meta($user_id, '_user_relatorio', true);
     echo '<br>';
+    echo "<br>";
 
     // etapa 2 - questionario
-
+    echo "<h4>".$cabecalho_etapa2."</h4>";
+    echo "<br>";
     // echo $cabecalho_etapa2
 
     // 1
@@ -731,17 +740,18 @@ function consulta_respostas($user_id,
     echo $cabecalho_primeira;
     echo get_user_meta($user_id, '_user_primeira', true);
     echo "<br>";
+    echo "<br>";
     
     // 2
-    
     echo $cabecalho_segunda;
     echo get_user_meta($user_id, '_user_segunda', true);
     echo "<br>";
-
+    echo "<br>";
     // 3
     
     echo $cabecalho_terceira;
     echo get_user_meta($user_id, '_user_terceira', true);
+    echo "<br>";
     echo "<br>";
     
     // 4
@@ -749,11 +759,13 @@ function consulta_respostas($user_id,
     echo $cabecalho_quarta;
     echo get_user_meta($user_id, '_user_quarta', true);
     echo "<br>";
+    echo "<br>";
     
     // 5
     
     echo $cabecalho_quinta;
     echo get_user_meta($user_id, '_user_quinta', true);
+    echo "<br>";
     echo "<br>";
 
     // 6
@@ -761,15 +773,17 @@ function consulta_respostas($user_id,
     echo $cabecalho_sexta;
     echo get_user_meta($user_id, '_user_sexta', true);
     echo "<br>";
+    echo "<br>";
 
     // desafio
 
     echo $cabecalho_desafio;
-
+    echo "<br>";
     // desafio 1
     
     echo '<strong>Desafio 1</strong><br>';
     echo get_user_meta($user_id, '_user_desafio1', true);
+    echo "<br>";
     echo "<br>";
 
     // desafio 2
@@ -777,15 +791,18 @@ function consulta_respostas($user_id,
     echo "<strong>Desafio 2</strong><br>";
     echo get_user_meta($user_id, '_user_desafio2', true);
     echo "<br>";
+    echo "<br>";
 
     // solucao
 
     echo $cabecalho_solucao;
+    echo "<br>";
 
     // solucao 1
 
     echo "<strong>Solução 1</strong><br>";
     echo get_user_meta($user_id, '_user_solucao1', true);
+    echo "<br>";
     echo "<br>";
 
     // solucao 2
@@ -793,14 +810,18 @@ function consulta_respostas($user_id,
     echo "<strong>Solução 2</strong><br>";
     echo get_user_meta($user_id, '_user_solucao2', true);
     echo "<br>";
+    echo "<br>";
+
     // atividade
 
     echo $cabecalho_atividade;
+    echo "<br>";
 
     // atividade 1
 
     echo "<strong>Atividade 1</strong><br>";
     echo get_user_meta($user_id, '_user_atividade1', true);
+    echo "<br>";
     echo "<br>";
 
     // atividade 2
@@ -808,17 +829,33 @@ function consulta_respostas($user_id,
     echo "<strong>Atividade 2</strong><br>";
     echo get_user_meta($user_id, '_user_atividade2', true);
     echo "<br>";
+    echo "<br>";
     
     $att_id = get_user_meta($user_id, '_user_att1', true);
     if($att_id)
     {
 	    echo '<br/><strong>Documentos Anexados:</strong><br/>';
+           echo "<br>";
 	    echo wp_get_attachment_link($att_id);
     }
     echo '<br><br>';
 }
 
 //add_shortcode('perguntas', 'consultas_html_form_code');
+
+// style and script 
+
+function consultas_enqueue_style() {
+       wp_enqueue_style( 'style-core', "/wp-content/plugins/consulta_publica/".'css/style.css', false ); 
+}
+
+function consultas_enqueue_script() {
+       wp_enqueue_script( 'field-forms', "/wp-content/plugins/consulta_publica/".'js/forms.js', false );
+}
+
+add_action( 'wp_enqueue_scripts', 'consultas_enqueue_style' );
+add_action( 'wp_enqueue_scripts', 'consultas_enqueue_script' );
+
 
 function consultas_insert_get_metas()
 {
