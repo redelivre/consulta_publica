@@ -630,6 +630,7 @@ function consultas_html_form_code() {
   {
     echo 'você precisa de estar logado para participar da consulta pública! ';
     echo '<a href=' . wp_login_url( get_permalink() ) . ' title="Login">Fazer Login!</a><br>';
+    echo "<div class='clear'>";	
   }
 
 // quem já votou:
@@ -637,9 +638,10 @@ function consultas_html_form_code() {
   $users = get_post_meta(get_the_ID(), "_users_voto", true);
   if ($users !== ""){
     foreach ($users as $user) {
+      echo "<div class='content_respostas'>";
+      echo "<div class='avatar-resposta'>";
       echo get_avatar($user);
-      echo "<br>";
-      echo "<br>";
+      echo "</div>";
 
     consulta_respostas($user, 
         $cabecalho_etapa1,
@@ -675,14 +677,13 @@ function consulta_respostas($user_id,
   )
 {
     //dados do usuário
-
+    echo "<div class='dados-resposta'>";
     echo "<strong>Nome: </strong><br>";
     echo get_user_meta($user_id, '_user_nome', true);
     echo "<br>";
     echo "<strong>Estado:</strong><br>";
     echo get_user_meta($user_id, '_user_uf', true);
-    echo "<br>";
-    echo "<br>";
+    echo "</div>";
 
     // etapa 1 - relatorio
 
@@ -805,6 +806,7 @@ function consulta_respostas($user_id,
 	    echo get_user_meta($user_id, '_user_documentosapoio', true);
     }
     echo '<br><br>';
+    echo '</div><!-- content_respostas -->';
 }
 
 //add_shortcode('perguntas', 'consultas_html_form_code');
