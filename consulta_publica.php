@@ -465,8 +465,8 @@ function consultas_html_form_code() {
     <div class="attach">
     	<div class="att-block">
     		<label for="att" class="att-item-label">
-    			<div class="att-item-title"><?php _e('Anexar Documento'); ?>
-     			</div>
+    			<div class="att-item-title"><strong><?php _e('Documentos de apoio fornecidos pela Sociedade Civil (upload de pdf ou descrição)'); ?></strong>
+     			</div><br/>
     		</label>
     		<input type="file" name="att" id="att"
     			value="<?php ?>"
@@ -474,7 +474,8 @@ function consultas_html_form_code() {
     		>
         </div>
     </div><br><?php
-    
+    echo '<textarea maxlength="2100" required rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres">' . ( isset( get_user_meta($user_id, '_user_documentosapoio')[0] ) ? esc_attr( get_user_meta($user_id, '_user_documentosapoio')[0] ) : '' ) . '</textarea>';
+    echo '</p>';
     // botao de enviar
 
     echo '<p><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="enviar" value="Enviar"/></p>';
@@ -549,7 +550,8 @@ function consultas_html_form_code() {
     update_user_meta( $user_id, '_user_solucao1', $_POST["solucao1"]);
     update_user_meta( $user_id, '_user_solucao2', $_POST["solucao2"]);
     update_user_meta( $user_id, '_user_atividade1', $_POST["atividade1"]);
-    update_user_meta( $user_id, '_user_atividade2', $_POST["atividade2"]);   
+    update_user_meta( $user_id, '_user_atividade2', $_POST["atividade2"]);
+    update_user_meta( $user_id, '_user_documentosapoio', $_POST["documentosapoio"]);
     
     $attach_id = array();
     $attach = array();
@@ -839,7 +841,8 @@ function consulta_respostas($user_id,
     {
 	    echo '<br/><strong>Documentos Anexados:</strong><br/>';
            echo "<br>";
-	    echo wp_get_attachment_link($att_id);
+	    echo wp_get_attachment_link($att_id).'<br/>';
+	    echo get_user_meta($user_id, '_user_documentosapoio', true);
     }
     echo '<br><br>';
 }
