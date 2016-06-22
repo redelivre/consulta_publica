@@ -608,6 +608,9 @@ function consultas_html_form_code() {
 	echo '<div class="seu-voto">';
     echo "<h1>Veja abaixo seu voto: </h1><br>";
     echo "<div class='content_respostas'>";
+    echo "<div class='avatar-resposta'>";
+    echo get_avatar($user_id);
+    echo '</div>';
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
         $cabecalho_etapa2,
@@ -686,7 +689,7 @@ function consulta_respostas($user_id,
     echo "</div>";
 
     // etapa 1 - relatorio
-
+    echo '<div class="clear"></div>';
     echo "<h4>".$cabecalho_etapa1."</h4>";
     echo "<br>";
     echo "<strong>".get_user_meta($user_id, '_user_relatorio_radio', true)."</strong>";
