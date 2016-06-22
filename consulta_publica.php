@@ -767,12 +767,14 @@ function consulta_respostas($user_id,
     echo $cabecalho_desafio;
 
     // desafio 1
-
+    
+    echo '<strong>Desafio 1</strong><br>';
     echo get_user_meta($user_id, '_user_desafio1', true);
     echo "<br>";
 
     // desafio 2
-
+    
+    echo "<strong>Desafio 2</strong><br>";
     echo get_user_meta($user_id, '_user_desafio2', true);
     echo "<br>";
 
@@ -780,13 +782,15 @@ function consulta_respostas($user_id,
 
     echo $cabecalho_solucao;
 
-    // sollucao 1
+    // solucao 1
 
+    echo "<strong>Solução 1</strong><br>";
     echo get_user_meta($user_id, '_user_solucao1', true);
     echo "<br>";
 
     // solucao 2
     
+    echo "<strong>Solução 2</strong><br>";
     echo get_user_meta($user_id, '_user_solucao2', true);
     echo "<br>";
     // atividade
@@ -795,11 +799,13 @@ function consulta_respostas($user_id,
 
     // atividade 1
 
+    echo "<strong>Atividade 1</strong><br>";
     echo get_user_meta($user_id, '_user_atividade1', true);
     echo "<br>";
 
     // atividade 2
 
+    echo "<strong>Atividade 2</strong><br>";
     echo get_user_meta($user_id, '_user_atividade2', true);
     echo "<br>";
     
