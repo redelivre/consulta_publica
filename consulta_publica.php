@@ -303,30 +303,8 @@ function consultas_html_form_code() {
   $cabecalho_atividade = '<strong>Atividades planejadas para os próximos 4 anos na implementação da Convenção (liste-as):</strong> <br>';
 
   if (is_user_logged_in() 
-       && !isset($_POST["nome"]) 
-       && !isset($_POST["municipio"]) 
-       && !isset($_POST["uf"])
-       && !isset($_POST["cpf"])
-       && !isset($_POST["representatividade"])
-       && !isset($_POST["instituicao"])
-       && !isset($_POST["setorial_area"])
        && !isset($_POST["primeira"])
-       && !isset($_POST["segunda"])
-       && !isset($_POST["terceira"])
-       && !isset($_POST["quarta"])
-       && !isset($_POST["quinta"])
-       && !isset($_POST["sexta"])
-       && get_user_meta($user_id, '_user_nome', true) != ''
-       && get_user_meta($user_id, '_user_municipio', true) != ''
-       && get_user_meta($user_id, '_user_uf', true) != ''
-       && get_user_meta($user_id, '_user_cpf', true) != ''
-       && get_user_meta($user_id, '_user_instituicao', true) != ''
-       && get_user_meta($user_id, '_user_primeira', true) != ''
-       && get_user_meta($user_id, '_user_segunda', true) != ''
-       && get_user_meta($user_id, '_user_terceira', true) != ''
-       && get_user_meta($user_id, '_user_quarta', true) != ''
-       && get_user_meta($user_id, '_user_quinta', true) != ''
-       && get_user_meta($user_id, '_user_sexta', true) != ''
+       && get_user_meta($user_id, '_user_primeira', true) == ''
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
