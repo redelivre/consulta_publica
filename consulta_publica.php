@@ -330,7 +330,7 @@ function consultas_html_form_code() {
        || isset($_POST["editar"]) && is_user_logged_in()
       ){
     
-    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" enctype="multipart/form-data">';
+    echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post" id="commentform" enctype="multipart/form-data">';
     echo '<p>';
     echo 'Nome * <br />';
     echo '<input type="text" name="nome" required value="' . ( isset( get_user_meta($user_id, '_user_nome')[0] ) ? esc_attr( get_user_meta($user_id, '_user_nome')[0] ) : '' ) . '" size="40" />';
