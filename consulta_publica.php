@@ -40,8 +40,9 @@ function create_consulta()
           'slug' => 'consultas'
           ),
         'menu_icon' => 'dashicons-admin-users',
+      	'supports' => array('title', 'editor', 'author')
         )
-          );
+     );
 }
 
 
@@ -330,7 +331,7 @@ function consultas_html_form_code() {
     // relatório
     echo '<h4>'.$cabecalho_etapa1.'</h4>';
     echo '<br>';
-    echo '<a href="/wp-content/plugins/consulta_publica/files/RELATÓRIO_QUADRIENAL_UNESCO.pdf" target="_blank">Acesse o relatório aqui</a><br>';
+    echo '<a class="relatorio-link" href="/wp-content/plugins/consulta_publica/files/RELATÓRIO_QUADRIENAL_UNESCO.pdf" target="_blank">Acesse o relatório aqui</a><br>';
     echo '<br>';
     $relatorio_radio = get_user_meta($user_id, '_user_relatorio_radio', true);
 
@@ -441,7 +442,7 @@ function consultas_html_form_code() {
     </div><br><?php
     echo '<textarea maxlength="2100" rows="10" cols="70" name="documentosapoio"  placeholder="Máximo de 2100 caracteres, ">' . ( get_user_meta($user_id, '_user_documentosapoio', true) != '' ? esc_attr( get_user_meta($user_id, '_user_documentosapoio', true) ) : '' ) . '</textarea>';
     echo '</p>';
-    echo 'Dúvidas sobre o sistema de consulta: <a href="mailto:laboratoriodeculturadigital@gmai.com">laboratoriodeculturadigital@gmai.com</a><br><br>';
+    echo 'Dúvidas sobre o sistema de consulta: <a href="mailto:laboratoriodeculturadigital@gmail.com">laboratoriodeculturadigital@gmail.com</a><br><br>';
     // botao de enviar
 
     echo '<p><input class="et_pb_button  et_pb_button_0 et_pb_module et_pb_bg_layout_light" type="submit" name="enviar" value="Enviar"/></p>';
@@ -478,16 +479,16 @@ function consultas_html_form_code() {
     $data = get_post_meta(get_the_ID(), '_users_voto', true);
     if( $data != "" ) {
       if ( !in_array( get_current_user_id(), $data ) ) {
-        $data[] = get_current_user_id();
+        $data[time()] = get_current_user_id();
       }
       $data = array_unique($data); // remove duplicates
-      sort( $data ); // sort array
+      krsort( $data ); // sort array
       update_post_meta(get_the_ID(), '_users_voto', $data);
     }
     else {
       $data = array();
       $user = get_current_user_id();
-      array_push($data, $user);
+      $data[time()] = $user;
       update_post_meta(get_the_ID(),'_users_voto' , $data);
     }
 
@@ -596,6 +597,9 @@ function consultas_html_form_code() {
 	echo '<div class="seu-voto">';
     echo "<h1>Veja abaixo seu voto: </h1><br>";
     echo "<div class='content_respostas'>";
+    echo "<div class='avatar-resposta'>";
+    echo get_avatar($user_id);
+    echo '</div>';
     consulta_respostas($user_id, 
         $cabecalho_etapa1,
         $cabecalho_etapa2,
@@ -622,29 +626,36 @@ function consultas_html_form_code() {
 // quem já votou:
   $users = get_post_meta(get_the_ID(), "_users_voto", true);
   if ($users !== ""){
-  	echo '<div class="quem-votou">';
-  	echo "<br/><h1>Quem Votou: </h1><br>";
-    foreach ($users as $user) {
-      echo "<div class='content_respostas'>";
-      echo "<div class='avatar-resposta'>";
-      echo get_avatar($user);
-      echo "</div>";
-
-    consulta_respostas($user, 
-        $cabecalho_etapa1,
-        $cabecalho_etapa2,
-        $cabecalho_primeira,
-        $cabecalho_segunda,
-        $cabecalho_terceira,
-        $cabecalho_quarta,
-        $cabecalho_quinta,
-        $cabecalho_sexta,
-        $cabecalho_desafio,
-        $cabecalho_solucao,
-        $cabecalho_atividade
-      );
-    }
-    echo '</div>'; // End quem-votou
+  	$current_user_index = array_search($user_id, $users);
+  	if($current_user_index !== false)
+  	{
+  		unset($users[$current_user_index]);
+  	}
+  	if (count($users) > 0){
+	  	echo '<div class="quem-votou">';
+	  	echo "<br/><h1>Quem Votou: </h1><br>";
+	    foreach ($users as $user) {
+	      echo "<div class='content_respostas'>";
+	      echo "<div class='avatar-resposta'>";
+	      echo get_avatar($user);
+	      echo "</div>";
+	
+	    consulta_respostas($user, 
+	        $cabecalho_etapa1,
+	        $cabecalho_etapa2,
+	        $cabecalho_primeira,
+	        $cabecalho_segunda,
+	        $cabecalho_terceira,
+	        $cabecalho_quarta,
+	        $cabecalho_quinta,
+	        $cabecalho_sexta,
+	        $cabecalho_desafio,
+	        $cabecalho_solucao,
+	        $cabecalho_atividade
+	      );
+	    }
+	    echo '</div>'; // End quem-votou
+  	}
   }
 
 
@@ -674,7 +685,7 @@ function consulta_respostas($user_id,
     echo "</div>";
 
     // etapa 1 - relatorio
-
+    echo '<div class="clear"></div>';
     echo "<h4>".$cabecalho_etapa1."</h4>";
     echo "<br>";
     echo "<strong>".get_user_meta($user_id, '_user_relatorio_radio', true)."</strong>";
