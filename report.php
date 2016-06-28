@@ -34,10 +34,8 @@ class ConsultaPublicaReport
 			wp_enqueue_script('ConsultaPublicaReport', plugin_dir_url(__FILE__)."/js/admin.js", array('jquery'), '1.0', true);
 			wp_localize_script('ConsultaPublicaReport', 'ConsultaPublicaReport', array('actions' =>
 				array(
-					//'print' => array( 'label' => __('Print', 'wp-side-comments') ),
-					'export' => array( 'label' => __('CSV report', 'consulta_publica') ),
-					//'export_day' => array( 'label' => __('CSV by day', 'wp-side-comments') ),
-					//'export_user' => array( 'label' => __('CSV by user', 'wp-side-comments') ),
+					'export' => array( 'label' => __('Exportar relatório (CSV)', 'consulta_publica') ),
+					'export_xls' => array( 'label' => __('Exportar relatório (Excel)', 'consulta_publica') ),
 				)
 			));
 		}
@@ -60,7 +58,7 @@ class ConsultaPublicaReport
 			$wp_list_table = _get_list_table('WP_Posts_List_Table');  // depending on your resource type this could be WP_Users_List_Table, WP_Comments_List_Table, etc
 			$action = $wp_list_table->current_action();
 				
-			$allowed_actions = array('print', "export", 'export_day', 'export_user');
+			$allowed_actions = array("export", 'export_xls');
 			if(!in_array($action, $allowed_actions)) return;
 				
 			// security check
@@ -83,36 +81,19 @@ class ConsultaPublicaReport
 						'orderby' => 'title',
 						'order' => 'ASC',
 						'post_type' => $post_type,
-						'consultas_print_csv' => 2,
+						'consultas_print_csv' => 1,
 					));
 					break;
 				break;
-				/*case 'export_day':
+				case 'export_xls':
 					$wp_query = new \WP_Query( array(
-					'post__in' => $post_ids,
-					'orderby' => 'title',
-					'order' => 'ASC',
-					'post_type' => $post_type,
-					'wp_side_comments_print_csv' => 2,
+						'post__in' => $post_ids,
+						'orderby' => 'title',
+						'order' => 'ASC',
+						'post_type' => $post_type,
+						'consultas_print_xls' => 1,
 					));
 					break;
-				case 'export_user':
-					$wp_query = new \WP_Query( array(
-					'post__in' => $post_ids,
-					'orderby' => 'title',
-					'order' => 'ASC',
-					'post_type' => $post_type,
-					'wp_side_comments_print_csv' => 3,
-					));
-					break;
-				case 'print':
-					$wp_query = new \WP_Query( array(
-					'post__in' => $post_ids,
-					'orderby' => 'title',
-					'order' => 'ASC',
-					'post_type' => $post_type,
-					));
-					break;*/
 				default: return;
 			}
 				
@@ -126,7 +107,7 @@ class ConsultaPublicaReport
 		if($post_type == 'consultas')
 		{
 			return array_merge( $columns,
-				array( 'consulta_publica_report' => __( 'Report', 'consulta_publica' ) ) );
+				array( 'consulta_publica_report' => __( 'Relatório', 'consulta_publica' ) ) );
 		}
 		return $columns;
 	}
@@ -138,10 +119,8 @@ class ConsultaPublicaReport
 		{
 			$url_base = 'edit.php?s=&post_status=all&post_type=consultas&action2=-1';
 			
-			//echo '<a href="" target="_blank" title="'.__('Imprimir textos com comentários por parágrafo.','consulta_publica').'" ><span class="consulta_publica-icon-print-1" onclick="" ></span></a>';
-			echo '<a href="'.admin_url($url_base."&action=export&post%5B%5D=".$post_id).'" target="_blank" title="'.__('Exportar CSV','consulta_publica').'" ><span class="consulta-publica-icon-grid" >'.__('Exportar CSV','consulta_publica').'</span></a>';
-			//echo '<a href="" target="_blank" title="'.__('Exportar CSV com número de comentários por dia','consulta_publica').'" ><span class="consulta_publica-icon-calendar-alt" ></span></a>';
-			//echo '<a href="" target="_blank" title="'.__('Exportar CSV com número de comentários por usuário','consulta_publica').'" ><span class="consulta_publica-icon-user-pair" ></span></a>';
+			echo '<a href="'.admin_url($url_base."&action=export&post%5B%5D=".$post_id).'" target="_blank" title="'.__('Exportar em formato de tabela separada por ponto e vírgula (CSV)','consulta_publica').'" ><span class="consulta-publica-icon-grid" >'.__('Exportar CSV','consulta_publica').'</span></a>';
+			echo '<br/><a href="'.admin_url($url_base."&action=export_xls&post%5B%5D=".$post_id).'" target="_blank" title="'.__('Exportar em formato Microsoft Excel (XLS)','consulta_publica').'" ><span class="consulta-publica-icon-xls" >'.__('Exportar XLS','consulta_publica').'</span></a>';
 		}
 	}
 
