@@ -237,12 +237,15 @@ function consultas_action_custom_columns_content($column_id, $post_id)
   //run a switch statement for all of the custom columns created
   $metas = get_option('consulta_metas');
   $i = 0;
-  foreach ( $metas as $meta)
+  if(is_array($metas))
   {
-    if ( $i === 5) break;
-    if ( $column_id ==  $meta['slug'] )
-      echo ($value = get_post_meta($post_id, $meta['slug'], true)) ? $value : $meta['info'];
-    $i++;
+	  foreach ( $metas as $meta)
+	  {
+	    if ( $i === 5) break;
+	    if ( $column_id ==  $meta['slug'] )
+	      echo ($value = get_post_meta($post_id, $meta['slug'], true)) ? $value : $meta['info'];
+	    $i++;
+	  }
   }
 }
 
@@ -845,5 +848,7 @@ function consultas_insert_get_metas()
 
 register_activation_hook( __FILE__ , 'consultas_insert_get_metas' );
 require_once dirname(__FILE__)."/options.php"; 
+
+require_once dirname(__FILE__)."/report.php";
 
 ?>
