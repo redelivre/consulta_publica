@@ -134,9 +134,12 @@ class ConsultaPublicaReport
 	
 	function display_posts_print( $column, $post_id )
 	{
-		if ($column == 'consulta_publica_report'){
+		if ($column == 'consulta_publica_report')
+		{
+			$url_base = 'edit.php?s=&post_status=all&post_type=consultas&action2=-1';
+			
 			//echo '<a href="" target="_blank" title="'.__('Imprimir textos com comentários por parágrafo.','consulta_publica').'" ><span class="consulta_publica-icon-print-1" onclick="" ></span></a>';
-			echo '<a href="" target="_blank" title="'.__('Exportar CSV','consulta_publica').'" ><span class="consulta-publica-icon-grid" ></span></a>';
+			echo '<a href="'.admin_url($url_base."&action=export&post%5B%5D=".$post_id).'" target="_blank" title="'.__('Exportar CSV','consulta_publica').'" ><span class="consulta-publica-icon-grid" >'.__('Exportar CSV','consulta_publica').'</span></a>';
 			//echo '<a href="" target="_blank" title="'.__('Exportar CSV com número de comentários por dia','consulta_publica').'" ><span class="consulta_publica-icon-calendar-alt" ></span></a>';
 			//echo '<a href="" target="_blank" title="'.__('Exportar CSV com número de comentários por usuário','consulta_publica').'" ><span class="consulta_publica-icon-user-pair" ></span></a>';
 		}
