@@ -51,7 +51,7 @@ class ConsultaPublicaReport
 		global $typenow;
 		$post_type = $typenow;
 
-		if($post_type == 'consulta')
+		if($post_type == 'consultas')
 		{
 			// get the action
 			$wp_list_table = _get_list_table('WP_Posts_List_Table');  // depending on your resource type this could be WP_Users_List_Table, WP_Comments_List_Table, etc
@@ -61,7 +61,7 @@ class ConsultaPublicaReport
 			if(!in_array($action, $allowed_actions)) return;
 				
 			// security check
-			check_admin_referer('bulk-consultas');
+			//check_admin_referer('bulk-consultas');
 				
 			// make sure ids are submitted.  depending on the resource type, this may be 'media' or 'ids'
 			if(isset($_REQUEST['post'])) {
@@ -113,7 +113,7 @@ class ConsultaPublicaReport
 				default: return;
 			}
 				
-			include(CTLT_WP_SIDE_COMMENTS_PLUGIN_PATH .'report_print.php');
+			include(plugin_dir_path(__FILE__) .'/report_print.php');
 			exit();
 		}
 	}
