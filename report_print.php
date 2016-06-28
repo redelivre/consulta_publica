@@ -3,9 +3,13 @@
 if (have_posts())
 {
 	the_post();
+	
+	header('Content-Type: text/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename='.date('Ymd').'_consulta_publica_report.csv');
+	
+	$output = fopen('php://output', 'w');
 
 	$header = array(__('Usuário', 'consulta_publica'), __('Número de cometários', 'consulta_publica'));
-	$header = array_merge($header, $allmetas);
 	fputcsv($output, $header, ';');
 	$users = get_users();
 	foreach ($users as $key => $value)

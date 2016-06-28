@@ -26,13 +26,13 @@ class ConsultaPublicaReport
 
 		$currentScreen = get_current_screen();
 
-		if( $currentScreen->id == 'edit-page' && ( $post_type == 'post' || $post_type == 'page') )
+		if( $currentScreen->id == 'edit-consultas' && ( $post_type == 'consultas' ) )
 		{
-			wp_enqueue_script('ctlt-side-comments-bulk-print', CTLT_WP_SIDE_COMMENTS_PLUGIN_URL."/print/js/admin.js", array('jquery'), '1.0', true);
-			wp_localize_script('ctlt-side-comments-bulk-print', 'ctlt_bulk_print', array('actions' =>
+			wp_enqueue_script('ConsultaPublicaReport', plugin_dir_url(__FILE__)."/js/admin.js", array('jquery'), '1.0', true);
+			wp_localize_script('ConsultaPublicaReport', 'ConsultaPublicaReport', array('actions' =>
 				array(
 					//'print' => array( 'label' => __('Print', 'wp-side-comments') ),
-					'export' => array( 'label' => __('CSV by paragraph', 'wp-side-comments') ),
+					'export' => array( 'label' => __('CSV report', 'consulta_publica') ),
 					//'export_day' => array( 'label' => __('CSV by day', 'wp-side-comments') ),
 					//'export_user' => array( 'label' => __('CSV by user', 'wp-side-comments') ),
 				)
@@ -61,7 +61,7 @@ class ConsultaPublicaReport
 			if(!in_array($action, $allowed_actions)) return;
 				
 			// security check
-			check_admin_referer('bulk-posts');
+			check_admin_referer('bulk-consultas');
 				
 			// make sure ids are submitted.  depending on the resource type, this may be 'media' or 'ids'
 			if(isset($_REQUEST['post'])) {
@@ -75,8 +75,15 @@ class ConsultaPublicaReport
 			switch($action)
 			{
 				case 'export':
-					
+					$wp_query = new \WP_Query( array(
+						'post__in' => $post_ids,
+						'orderby' => 'title',
+						'order' => 'ASC',
+						'post_type' => $post_type,
+						'consultas_print_csv' => 2,
+					));
 					break;
+				break;
 				/*case 'export_day':
 					$wp_query = new \WP_Query( array(
 					'post__in' => $post_ids,
