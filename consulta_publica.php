@@ -274,20 +274,6 @@ function consultas_rewrite_catch() {
 }
 add_action( 'template_redirect', 'consultas_rewrite_catch' );
 
-//options page
-add_action( 'admin_menu', 'consultas_custom_admin_menu' );
-
-function consultas_custom_admin_menu() {
-  add_options_page(
-      'Configurações das Consultas Públicas',
-      'Configurações das Consultas Públicas',
-      'manage_options',
-      'consultas',
-      'consultass_options_page'
-      );
-
-}
-
 function consultas_html_form_code() {
   $user_id = get_current_user_id();
   $cabecalho_etapa1 = '<strong>Etapa 1 - Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco:</strong><br>';
@@ -834,5 +820,72 @@ function consultas_insert_get_metas()
 
 register_activation_hook( __FILE__ , 'consultas_insert_get_metas' );
 require_once dirname(__FILE__)."/options.php"; 
+
+function consultas_user_responses($consulta_id){
+
+  $cabecalho_etapa1     = 'Etapa 1 - Sobre o Relatório Quadrienal (2012-2015) da Convenção da Diversidade Cultural da Unesco';
+  $cabecalho_etapa2     = 'Etapa 2 - A sociedade civil tomou iniciativas para';
+  $cabecalho_primeira   = 'Promover os princípios e objetivos da Convenção local e internacionalmente. (Como?)';
+  $cabecalho_segunda    = 'Levar as preocupações dos cidadãos, associações e empresas às autoridades públicas, incluindo as de grupos vulneráveis (Como?)';
+  $cabecalho_terceira   = 'Contribui para a realização de uma maior transparência e prestação de contas na governança cultural (Como?)';
+  $cabecalho_quarta     = 'Monitorar a política e o programa de implementação de medidas para proteger e promover a diversidade das expressões culturais (Como?)';
+  $cabecalho_quinta     = 'Criar capacidades nas áreas ligadas à Convenção e que recolhem dados. (Como?)';
+  $cabecalho_sexta      = 'Criar parcerias inovadoras com os setores públicos e privados e com a sociedade civil de outras regiões do mundo. (Como?)';
+  $cabecalho_desafio    = 'Desafios encontrados ou previstos na implementação da Convenção';
+  $cabecalho_solucao    = 'Soluções encontradas e previstas';
+  $cabecalho_atividade  = 'Atividades planejadas para os próximos 4 anos na implementação da Convenção (liste-as)';
+
+  $variable = get_post_meta($consulta_id, '_users_voto', true);
+  $responses = array();
+  foreach ($variable as $user_id) {
+    $user_response = array();
+    $user_response['Nome'] = get_user_meta($user_id, '_user_nome', true);
+    $user_response['CPF'] = get_user_meta($user_id, '_user_cpf', true);
+    $user_response['Email'] = get_user_meta($user_id, '_user_email', true);
+    $user_response['Telefone'] = get_user_meta($user_id, '_user_telefone', true);
+    $user_response['Municipio'] = get_user_meta($user_id, '_user_municipio', true);
+    $user_response['Estado'] = get_user_meta($user_id, '_user_uf', true);
+
+    $representatividade = get_user_meta($user_id, '_user_representatividade', true);
+
+    $user_response["Representatividade"] = $representatividade;
+
+    if($representatividade === "Plenária"){
+     $user_response["Instituicao"] = get_user_meta($user_id, '_user_instituicao', true);
+    }
+    elseif($representatividade === "Setorial"){
+       $user_response["Área"] = get_user_meta($user_id, '_user_setorial_area', true);
+    }
+
+    $user_response[$cabecalho_etapa1] = get_user_meta($user_id, '_user_relatorio_radio', true);
+    $user_response["Resposta para: " . $cabecalho_etapa1] = get_user_meta($user_id, '_user_relatorio', true);
+    $user_response[$cabecalho_etapa2] = "DIV";
+    $user_response["Resposta para" . $cabecalho_primeira] = get_user_meta($user_id, '_user_primeira', true);
+    $user_response[$cabecalho_segunda] = get_user_meta($user_id, '_user_segunda', true);
+    $user_response[$cabecalho_terceira] = get_user_meta($user_id, '_user_terceira', true);
+    $user_response[$cabecalho_quarta] = get_user_meta($user_id, '_user_quarta', true);
+    $user_response[$cabecalho_quinta] = get_user_meta($user_id, '_user_quinta', true);
+    $user_response[$cabecalho_sexta] = get_user_meta($user_id, '_user_sexta', true);
+    $user_response[$cabecalho_desafio] = 'DESAFIOS';
+    $user_response["Desafio 1"] = get_user_meta($user_id, '_user_desafio1', true);
+    $user_response["Desafio 2"] = get_user_meta($user_id, '_user_desafio2', true);
+    $user_response[$cabecalho_solucao] = "SOLUÇÕES";
+    $user_response["Solução 1"] = get_user_meta($user_id, '_user_solucao1', true);
+    $user_response["Solução 2"] = get_user_meta($user_id, '_user_solucao2', true);
+    $user_response[$cabecalho_atividade] = "ATIVIDADES";
+    $user_response["Atividade 1"] = get_user_meta($user_id, '_user_atividade1', true);
+    $user_response["Atividade 2"] = get_user_meta($user_id, '_user_atividade2', true);
+
+      $att_id = get_user_meta($user_id, '_user_att1', true);
+      if($att_id)
+      {
+         $user_response["Documentos Anexados"] = wp_get_attachment_url($att_id);
+       
+      }
+     $responses[] = $user_response;
+  }
+     
+  return $responses;
+}
 
 ?>
