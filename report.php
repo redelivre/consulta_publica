@@ -15,6 +15,9 @@ class ConsultaPublicaReport
 
 		add_action('load-edit.php',         array( $this, 'bulk_action'));
 		//add_action('admin_notices',         array( $this, 'admin_notices'));
+		
+		add_filter( 'manage_posts_columns' , array($this, 'manage_posts_columns' ), 1000, 2);
+		add_action( 'manage_consultas_posts_custom_column' , array($this, 'display_posts_print'), 10, 2 );
 	}
 
 	/**
@@ -115,6 +118,27 @@ class ConsultaPublicaReport
 				
 			include(plugin_dir_path(__FILE__) .'/report_print.php');
 			exit();
+		}
+	}
+	
+	function manage_posts_columns($columns, $post_type)
+	{
+		if($post_type == 'consultas')
+		{
+			return array_merge( $columns,
+				array( 'consulta_publica_report' => __( 'Report', 'consulta_publica' ) ) );
+		}
+		return $columns;
+	}
+	
+	
+	function display_posts_print( $column, $post_id )
+	{
+		if ($column == 'consulta_publica_report'){
+			//echo '<a href="" target="_blank" title="'.__('Imprimir textos com comentários por parágrafo.','consulta_publica').'" ><span class="consulta_publica-icon-print-1" onclick="" ></span></a>';
+			echo '<a href="" target="_blank" title="'.__('Exportar CSV','consulta_publica').'" ><span class="consulta-publica-icon-grid" ></span></a>';
+			//echo '<a href="" target="_blank" title="'.__('Exportar CSV com número de comentários por dia','consulta_publica').'" ><span class="consulta_publica-icon-calendar-alt" ></span></a>';
+			//echo '<a href="" target="_blank" title="'.__('Exportar CSV com número de comentários por usuário','consulta_publica').'" ><span class="consulta_publica-icon-user-pair" ></span></a>';
 		}
 	}
 
